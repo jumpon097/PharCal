@@ -4,35 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>เภสัชคำนวณทางเภสัชกรรมปฏิบัติ ตาม USP-NF <1160></title>
-  
-  <!-- PWA Meta Tags -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#f59e0b" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="PharCalc" />
 
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Sarabun', 'Inter', 'sans-serif'],
-          }
+          fontFamily: { sans: ['Sarabun', 'Inter', 'sans-serif'] }
         }
       }
     }
   </script>
-  
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- React 18 & ReactDOM & Babel -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -46,14 +37,13 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState } = React;
 
-    // Service Worker Registration สำหรับ PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('PWA Service Worker registered:', reg.scope))
-          .catch(err => console.log('PWA Service Worker registration failed:', err));
+          .then(reg => console.log('SW reg:', reg.scope))
+          .catch(err => console.log('SW fail:', err));
       });
     }
 
@@ -75,17 +65,15 @@
       Sparkles: (props) => <IconWrapper {...props}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></IconWrapper>,
       Droplets: (props) => <IconWrapper {...props}><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/></IconWrapper>,
       Layers: (props) => <IconWrapper {...props}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></IconWrapper>,
-      Stethoscope: (props) => <IconWrapper {...props}><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></IconWrapper>,
       BookOpen: (props) => <IconWrapper {...props}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></IconWrapper>,
-      Bookmark: (props) => <IconWrapper {...props}><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></IconWrapper>,
-      AlertTriangle: (props) => <IconWrapper {...props}><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></IconWrapper>,
-      ShieldCheck: (props) => <IconWrapper {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></IconWrapper>,
       ChevronRight: (props) => <IconWrapper {...props}><polyline points="9 18 15 12 9 6"/></IconWrapper>,
-      Menu: (props) => <IconWrapper {...props}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></IconWrapper>,
-      X: (props) => <IconWrapper {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></IconWrapper>,
       Grid: (props) => <IconWrapper {...props}><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="3" x2="21" y1="15" y2="15"/><line x1="9" x2="9" y1="3" y2="21"/><line x1="15" x2="15" y1="3" y2="21"/></IconWrapper>,
+      Zap: (props) => <IconWrapper {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></IconWrapper>,
       Timer: (props) => <IconWrapper {...props}><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></IconWrapper>,
-      Zap: (props) => <IconWrapper {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></IconWrapper>
+      Thermometer: (props) => <IconWrapper {...props}><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></IconWrapper>,
+      ShieldAlert: (props) => <IconWrapper {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></IconWrapper>,
+      Clock: (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></IconWrapper>,
+      Gauge: (props) => <IconWrapper {...props}><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></IconWrapper>
     };
 
     function PharCalcWebApp() {
@@ -95,15 +83,12 @@
 
       const pdfDownloadUrl = "https://drive.google.com/file/d/1pCb2TKqvuzBXCaNr_Zr0GgFeXhA_Qcvj/view?usp=sharing";
 
-      // --- States บทคำนวณ ---
-      // บทที่ 2
+      // --- States บทที่ 2 ถึง 19 ---
       const [c2Moiety, setC2Moiety] = useState('250');
       const [c2MwIngredient, setC2MwIngredient] = useState('456');
       const [c2MwMoiety, setC2MwMoiety] = useState('360');
       const [c2LossOnDrying, setC2LossOnDrying] = useState('0.4');
-      const [c2UseMoisture, setC2UseMoisture] = useState(true);
 
-      // บทที่ 3.1
       const [c3Weight, setC3Weight] = useState('36');
       const [c3WeightUnit, setC3WeightUnit] = useState('lb');
       const [c3DoseRate, setC3DoseRate] = useState('15');
@@ -111,57 +96,68 @@
       const [c3StockMg, setC3StockMg] = useState('200');
       const [c3StockMl, setC3StockMl] = useState('5');
 
-      // บทที่ 3.2
-      const [c3BsaMode, setC3BsaMode] = useState('human');
-      const [c3BsaUnit, setC3BsaUnit] = useState('imperial');
       const [c3Height, setC3Height] = useState('74');
       const [c3BsaWeight, setC3BsaWeight] = useState('183');
-      const [c3PetWeightG, setC3PetWeightG] = useState('5800');
-      const [c3PetType, setC3PetType] = useState('cat');
       const [c3DosePerBsa, setC3DosePerBsa] = useState('375');
       const [c3ConcPerMl, setC3ConcPerMl] = useState('10');
 
-      // บทที่ 4
       const [c4TotalUnits, setC4TotalUnits] = useState('1200000');
       const [c4PotencyUnitsPerMg, setC4PotencyUnitsPerMg] = useState('1180');
 
-      // บทที่ 6
       const [c6PcntWw, setC6PcntWw] = useState('37');
       const [c6Sg, setC6Sg] = useState('1.18');
       const [c6TargetVolMl, setC6TargetVolMl] = useState('75');
 
-      // บทที่ 7
       const [c7Mw, setC7Mw] = useState('388.48');
       const [c7Valence, setC7Valence] = useState('1');
       const [c7DoseMg, setC7DoseMg] = useState('250');
 
-      // บทที่ 8
       const [c8Q1, setC8Q1] = useState('60');
       const [c8C1, setC8C1] = useState('10');
       const [c8C2, setC8C2] = useState('5');
 
-      // บทที่ 10 Alligation Alternate
+      const [c9StockAlc, setC9StockAlc] = useState('95');
+      const [c9TargetAlc, setC9TargetAlc] = useState('70');
+      const [c9TargetVol, setC9TargetVol] = useState('500');
+
       const [c10High, setC10High] = useState('70');
       const [c10Low, setC10Low] = useState('30');
       const [c10Target, setC10Target] = useState('50');
       const [c10TotalQty, setC10TotalQty] = useState('500');
 
-      // บทที่ 11 Aliquot Method
-      const [c11Sensitivity, setC11Sensitivity] = useState('6'); // SR (mg)
-      const [c11MaxError, setC11MaxError] = useState('5'); // Error ไม่เกิน 5%
-      const [c11DrugNeeded, setC11DrugNeeded] = useState('20'); // ตัวยาที่ต้องการชั่ง (mg)
-      const [c11DiluentWeighed, setC11DiluentWeighed] = useState('1000'); // น้ำหนักตัวเจือจางที่ผสม
+      const [c11Sensitivity, setC11Sensitivity] = useState('6');
+      const [c11MaxError, setC11MaxError] = useState('5');
+      const [c11DrugNeeded, setC11DrugNeeded] = useState('20');
+      const [c11TotalMixture, setC11TotalMixture] = useState('1000');
 
-      // บทที่ 13 IV Flow Rate
+      const [c12TotalVol, setC12TotalVol] = useState('100');
+      const [c12WaterAdded, setC12WaterAdded] = useState('68');
+
       const [c13VolumeMl, setC13VolumeMl] = useState('1000');
       const [c13TimeHours, setC13TimeHours] = useState('8');
-      const [c13DropFactor, setC13DropFactor] = useState('15'); // gtt/mL
+      const [c13DropFactor, setC13DropFactor] = useState('15');
 
-      // บทที่ 14 Tonicity & E-Value
-      const [c14DrugWeightG, setC14DrugWeightG] = useState('1'); // กรัม
-      const [c14EValue, setC14EValue] = useState('0.23'); // ค่า E-value เทียบเท่า NaCl
-      const [c14FinalVolumeMl, setC14FinalVolumeMl] = useState('100'); // ปริมาตรตำรับ (mL)
+      const [c14DrugG, setC14DrugG] = useState('1');
+      const [c14EValue, setC14EValue] = useState('0.23');
+      const [c14VolMl, setC14VolMl] = useState('100');
 
+      const [c15Pka, setC15Pka] = useState('4.76');
+      const [c15Salt, setC15Salt] = useState('0.1');
+      const [c15Acid, setC15Acid] = useState('0.1');
+
+      const [c16Temp, setC16Temp] = useState('25');
+      const [c16Scale, setC16Scale] = useState('C');
+
+      const [c17K, setC17K] = useState('5'); // USP endotoxin threshold (EU/kg)
+      const [c17M, setC17M] = useState('10'); // Max dose per kg/hr
+
+      const [c18Order, setC18Order] = useState('1');
+      const [c18K, setC18K] = useState('0.005'); // day^-1
+      const [c18C0, setC18C0] = useState('100');
+
+      const [c19Temps, setC19Temps] = useState('25, 28, 30, 26, 24, 29');
+
+      // --- Navigation Tabs ---
       const navTabs = [
         { id: 'chap2', label: 'บทที่ 2: ปริมาณตัวยา (W=AB/CD)', icon: Icons.FlaskConical },
         { id: 'chap3w', label: 'บทที่ 3.1: ขนาดยาตามน้ำหนัก', icon: Icons.Scale },
@@ -169,175 +165,108 @@
         { id: 'chap4', label: 'บทที่ 4: Potency Units', icon: Icons.Sparkles },
         { id: 'chap6', label: 'บทที่ 6: Density & SG', icon: Icons.Droplets },
         { id: 'chap7', label: 'บทที่ 7: mEq & mmol', icon: Icons.Layers },
-        { id: 'chap8', label: 'บทที่ 8: เจือจาง (Q1C1=Q2C2)', icon: Icons.Stethoscope },
+        { id: 'chap8', label: 'บทที่ 8: เจือจาง (Q1C1=Q2C2)', icon: Icons.FlaskConical },
+        { id: 'chap9', label: 'บทที่ 9: แอลกอฮอล์ & Proof', icon: Icons.Droplets },
         { id: 'chap10', label: 'บทที่ 10: Alligation Alternate', icon: Icons.Grid },
         { id: 'chap11', label: 'บทที่ 11: Aliquot Dilution', icon: Icons.Zap },
+        { id: 'chap12', label: 'บทที่ 12: ปริมาตรผงยาแทนที่', icon: Icons.Layers },
         { id: 'chap13', label: 'บทที่ 13: IV Flow Rate', icon: Icons.Timer },
-        { id: 'chap14', label: 'บทที่ 14: Tonicity (E-Value)', icon: Icons.Droplets },
+        { id: 'chap14', label: 'บทที่ 14: โทนิซิตี & E-Value', icon: Icons.Droplets },
+        { id: 'chap15', label: 'บทที่ 15: pH บัฟเฟอร์ (H-H)', icon: Icons.Gauge },
+        { id: 'chap16', label: 'บทที่ 16: แปลงอุณหภูมิ', icon: Icons.Thermometer },
+        { id: 'chap17', label: 'บทที่ 17: เอนโดท็อกซิน (K/M)', icon: Icons.ShieldAlert },
+        { id: 'chap18', label: 'บทที่ 18: เสถียรภาพ & t90', icon: Icons.Clock },
+        { id: 'chap19', label: 'บทที่ 19: อุณหภูมิเฉลี่ยจลน์ (MKT)', icon: Icons.Thermometer },
       ];
 
       const tocList = [
         { num: 1, title: 'บทนำ (Introduction)', pages: '1-5', tabRef: null },
         { num: 2, title: 'ปริมาณสารออกฤทธิ์ (Active Ingredients)', pages: '6-28', tabRef: 'chap2' },
         { num: 3, title: 'การให้ยาตามน้ำหนัก และ พื้นที่ผิวกาย', pages: '29-43', tabRef: 'chap3w' },
-        { num: 4, title: 'หน่วยความแรงทางชีวภาพ (Biological Potency Units)', pages: '44-47', tabRef: 'chap4' },
-        { num: 5, title: 'ผลรวมปริมาตร และน้ำหนัก (Volume & Weight Sums)', pages: '48-52', tabRef: null },
+        { num: 4, title: 'หน่วยความแรงทางชีวภาพ (Potency Units)', pages: '44-47', tabRef: 'chap4' },
+        { num: 5, title: 'ผลรวมปริมาตร และน้ำหนัก (Volume Contraction)', pages: '48-52', tabRef: 'chap9' },
         { num: 6, title: 'ความหนาแน่น และความถ่วงจำเพาะ (Density & SG)', pages: '53-61', tabRef: 'chap6' },
         { num: 7, title: 'มิลลิอีคิววาเลนต์ และ มิลลิโมล (mEq & mmol)', pages: '62-75', tabRef: 'chap7' },
         { num: 8, title: 'การแสดงความเข้มข้น (Concentration Expressions)', pages: '76-159', tabRef: 'chap8' },
-        { num: 9, title: 'แอลกอฮอล์ และเอทานอล (Alcohol and Ethanol)', pages: '160-169', tabRef: null },
+        { num: 9, title: 'แอลกอฮอล์ และเอทานอล (Alcohol and Ethanol)', pages: '160-169', tabRef: 'chap9' },
         { num: 10, title: 'Alligation Alternate และ Algebra', pages: '170-184', tabRef: 'chap10' },
         { num: 11, title: 'การเจือจางแบบ Aliquot (Aliquot Dilutions)', pages: '185-204', tabRef: 'chap11' },
-        { num: 12, title: 'ปริมาตรผงยาในของเหลว (Powder Volume)', pages: '205-209', tabRef: null },
+        { num: 12, title: 'ปริมาตรผงยาในของเหลว (Powder Volume)', pages: '205-209', tabRef: 'chap12' },
         { num: 13, title: 'อัตราการไหลของยาทางหลอดเลือดดำ (IV Flow Rate)', pages: '210-217', tabRef: 'chap13' },
         { num: 14, title: 'ออสโมลาริตี และ โทนิซิตี (Osmolarity & Tonicity)', pages: '218-230', tabRef: 'chap14' },
-        { num: 15, title: 'pH และ pH Buffers', pages: '231-254', tabRef: null },
-        { num: 16, title: 'อุณหภูมิ (Temperatures)', pages: '255-267', tabRef: null },
-        { num: 17, title: 'เอนโดท็อกซิน (Endotoxins)', pages: '268-275', tabRef: null },
-        { num: 18, title: 'จลนพลศาสตร์ความคงตัว & ทำนายวันหมดอายุ', pages: '276-350', tabRef: null },
-        { num: 19, title: 'อุณหภูมิเฉลี่ยจลนพลศาสตร์ (MKT)', pages: '351-396', tabRef: null },
+        { num: 15, title: 'pH และ pH Buffers', pages: '231-254', tabRef: 'chap15' },
+        { num: 16, title: 'อุณหภูมิ (Temperatures)', pages: '255-267', tabRef: 'chap16' },
+        { num: 17, title: 'เอนโดท็อกซิน (Endotoxins)', pages: '268-275', tabRef: 'chap17' },
+        { num: 18, title: 'จลนพลศาสตร์ความคงตัว & ทำนายวันหมดอายุ', pages: '276-350', tabRef: 'chap18' },
+        { num: 19, title: 'อุณหภูมิเฉลี่ยจลนพลศาสตร์ (MKT)', pages: '351-396', tabRef: 'chap19' },
         { num: 20, title: 'ภาคผนวก (Appendix)', pages: '397-413', tabRef: null },
         { num: 21, title: 'บทสรุป (Summary)', pages: '414-423', tabRef: null },
       ];
 
-      // --- ฟังก์ชันการคำนวณทั้งหมด ---
-      const calcC2 = () => {
-        const A = parseFloat(c2Moiety) || 0;
-        const B = parseFloat(c2MwIngredient) || 0;
-        const C = parseFloat(c2MwMoiety) || 1;
-        const lod = c2UseMoisture ? (parseFloat(c2LossOnDrying) || 0) : 0;
-        const D = 1 - (lod / 100);
-        const W = (C * D) !== 0 ? (A * B) / (C * D) : 0;
-        const est = (C !== 0) ? (A * B) / C : 0;
-        return { W: W.toFixed(1), D: D.toFixed(4), est: est.toFixed(1) };
-      };
+      // --- Calculations ---
+      const A = parseFloat(c2Moiety) || 0, B = parseFloat(c2MwIngredient) || 0, C = parseFloat(c2MwMoiety) || 1;
+      const D = 1 - ((parseFloat(c2LossOnDrying) || 0) / 100);
+      const resC2 = (C * D !== 0 ? (A * B) / (C * D) : 0).toFixed(1);
 
-      const calcC3W = () => {
-        const rawWt = parseFloat(c3Weight) || 0;
-        const wtKg = c3WeightUnit === 'lb' ? rawWt / 2.2 : rawWt;
-        const rate = parseFloat(c3DoseRate) || 0;
-        const freq = parseFloat(c3DoseFreq) || 1;
-        const stockMg = parseFloat(c3StockMg) || 1;
-        const stockMl = parseFloat(c3StockMl) || 1;
-        const totalMgPerDay = wtKg * rate;
-        const mgPerDose = freq > 0 ? totalMgPerDay / freq : 0;
-        const mlPerDose = stockMg > 0 ? (mgPerDose * stockMl) / stockMg : 0;
-        return { wtKg: wtKg.toFixed(2), totalMgPerDay: totalMgPerDay.toFixed(1), mgPerDose: mgPerDose.toFixed(1), mlPerDose: mlPerDose.toFixed(2) };
-      };
+      const wtKg = c3WeightUnit === 'lb' ? (parseFloat(c3Weight) || 0) / 2.2 : (parseFloat(c3Weight) || 0);
+      const resC3W = ((wtKg * (parseFloat(c3DoseRate) || 0) / (parseFloat(c3DoseFreq) || 1) * (parseFloat(c3StockMl) || 1)) / (parseFloat(c3StockMg) || 1)).toFixed(2);
 
-      const calcC3Bsa = () => {
-        let bsa = 0;
-        if (c3BsaMode === 'human') {
-          const ht = parseFloat(c3Height) || 0;
-          const wt = parseFloat(c3BsaWeight) || 0;
-          bsa = c3BsaUnit === 'imperial' ? Math.sqrt((ht * wt) / 3131) : Math.sqrt((ht * wt) / 3600);
-        } else {
-          const g = parseFloat(c3PetWeightG) || 0;
-          const factor = c3PetType === 'cat' ? 10.0 : 10.1;
-          bsa = (factor * Math.pow(g, 0.667)) / 10000;
-        }
-        const doseRate = parseFloat(c3DosePerBsa) || 0;
-        const conc = parseFloat(c3ConcPerMl) || 1;
-        const totalDoseMg = bsa * doseRate;
-        const volumeMl = conc > 0 ? totalDoseMg / conc : 0;
-        return { bsa: bsa.toFixed(3), totalDoseMg: totalDoseMg.toFixed(1), volumeMl: volumeMl.toFixed(1) };
-      };
+      const bsa = Math.sqrt(((parseFloat(c3Height) || 0) * (parseFloat(c3BsaWeight) || 0)) / 3131);
+      const resC3Bsa = (bsa * (parseFloat(c3DosePerBsa) || 0) / (parseFloat(c3ConcPerMl) || 1)).toFixed(1);
 
-      const calcC4 = () => {
-        const u = parseFloat(c4TotalUnits) || 0;
-        const p = parseFloat(c4PotencyUnitsPerMg) || 1;
-        return (p > 0 ? u / p : 0).toFixed(1);
-      };
+      const resC4 = ((parseFloat(c4TotalUnits) || 0) / (parseFloat(c4PotencyUnitsPerMg) || 1)).toFixed(1);
 
-      const calcC6 = () => {
-        const ww = parseFloat(c6PcntWw) || 0;
-        const sg = parseFloat(c6Sg) || 1;
-        const vol = parseFloat(c6TargetVolMl) || 0;
-        const wv = ww * sg;
-        const pureGram = (wv / 100) * vol;
-        return { wv: wv.toFixed(2), pureGram: pureGram.toFixed(2) };
-      };
+      const wv = (parseFloat(c6PcntWw) || 0) * (parseFloat(c6Sg) || 1);
+      const resC6 = ((wv / 100) * (parseFloat(c6TargetVolMl) || 0)).toFixed(2);
 
-      const calcC7 = () => {
-        const mw = parseFloat(c7Mw) || 1;
-        const val = parseFloat(c7Valence) || 1;
-        const doseMg = parseFloat(c7DoseMg) || 0;
-        const eqWeight = mw / val;
-        const mEqInDose = eqWeight > 0 ? doseMg / eqWeight : 0;
-        const mmolInDose = mw > 0 ? doseMg / mw : 0;
-        return { mEqWeightMg: eqWeight.toFixed(2), mEqInDose: mEqInDose.toFixed(3), mmolInDose: mmolInDose.toFixed(3) };
-      };
+      const eqWeight = (parseFloat(c7Mw) || 1) / (parseFloat(c7Valence) || 1);
+      const resC7 = eqWeight > 0 ? ((parseFloat(c7DoseMg) || 0) / eqWeight).toFixed(3) : '0';
 
-      const calcC8 = () => {
-        const q1 = parseFloat(c8Q1) || 0;
-        const c1 = parseFloat(c8C1) || 0;
-        const c2 = parseFloat(c8C2) || 1;
-        const q2 = c2 > 0 ? (q1 * c1) / c2 : 0;
-        const diluent = q2 - q1;
-        return { q2: q2.toFixed(1), diluent: (diluent > 0 ? diluent : 0).toFixed(1) };
-      };
+      const resC8 = (((parseFloat(c8Q1) || 0) * (parseFloat(c8C1) || 0)) / (parseFloat(c8C2) || 1) - (parseFloat(c8Q1) || 0)).toFixed(1);
 
-      const calcC10 = () => {
-        const h = parseFloat(c10High) || 0;
-        const l = parseFloat(c10Low) || 0;
-        const t = parseFloat(c10Target) || 0;
-        const tot = parseFloat(c10TotalQty) || 0;
-        const valid = h > t && t > l;
-        const partH = valid ? t - l : 0;
-        const partL = valid ? h - t : 0;
-        const totalParts = partH + partL;
-        const qtyH = totalParts > 0 ? (partH / totalParts) * tot : 0;
-        const qtyL = totalParts > 0 ? (partL / totalParts) * tot : 0;
-        return { valid, partH, partL, totalParts, qtyH: qtyH.toFixed(1), qtyL: qtyL.toFixed(1) };
-      };
+      const resC9 = (((parseFloat(c9TargetVol) || 0) * (parseFloat(c9TargetAlc) || 0)) / (parseFloat(c9StockAlc) || 1)).toFixed(1);
 
-      const calcC11 = () => {
-        const sr = parseFloat(c11Sensitivity) || 6;
-        const err = parseFloat(c11MaxError) || 5;
-        const lwq = (sr * 100) / err; // Least Weighable Quantity (LWQ)
-        const drugTarget = parseFloat(c11DrugNeeded) || 0;
-        const drugWeighed = lwq; // ชั่งยาอย่างน้อยเท่ากับ LWQ
-        const totalMixture = parseFloat(c11DiluentWeighed) || 1000;
-        const aliquotWeight = drugWeighed > 0 ? (drugTarget * totalMixture) / drugWeighed : 0;
-        return { lwq: lwq.toFixed(1), drugWeighed: drugWeighed.toFixed(1), aliquotWeight: aliquotWeight.toFixed(1) };
-      };
+      const pH = parseFloat(c10High) || 0, pL = parseFloat(c10Low) || 0, pT = parseFloat(c10Target) || 0, pTot = parseFloat(c10TotalQty) || 0;
+      const partH = pT - pL, partL = pH - pT, totPart = partH + partL;
+      const resC10H = totPart > 0 ? ((partH / totPart) * pTot).toFixed(1) : '0';
+      const resC10L = totPart > 0 ? ((partL / totPart) * pTot).toFixed(1) : '0';
 
-      const calcC13 = () => {
-        const vol = parseFloat(c13VolumeMl) || 0;
-        const hr = parseFloat(c13TimeHours) || 1;
-        const df = parseFloat(c13DropFactor) || 15;
-        const mlPerHour = hr > 0 ? vol / hr : 0;
-        const gttPerMin = hr > 0 ? (vol * df) / (hr * 60) : 0;
-        return { mlPerHour: mlPerHour.toFixed(1), gttPerMin: gttPerMin.toFixed(0) };
-      };
+      const lwq = ((parseFloat(c11Sensitivity) || 6) * 100) / (parseFloat(c11MaxError) || 5);
+      const resC11 = lwq > 0 ? (((parseFloat(c11DrugNeeded) || 0) * (parseFloat(c11TotalMixture) || 1000)) / lwq).toFixed(1) : '0';
 
-      const calcC14 = () => {
-        const drugG = parseFloat(c14DrugWeightG) || 0;
-        const eVal = parseFloat(c14EValue) || 0;
-        const vol = parseFloat(c14FinalVolumeMl) || 0;
-        const naclNeededTotal = 0.009 * vol; // สำหรับ Isotonic 0.9% NaCl
-        const naclEquivFromDrug = drugG * eVal;
-        const naclToAdd = naclNeededTotal - naclEquivFromDrug;
-        return { naclNeededTotal: naclNeededTotal.toFixed(3), naclEquivFromDrug: naclEquivFromDrug.toFixed(3), naclToAdd: (naclToAdd > 0 ? naclToAdd : 0).toFixed(3) };
-      };
+      const resC12 = ((parseFloat(c12TotalVol) || 0) - (parseFloat(c12WaterAdded) || 0)).toFixed(1);
 
-      const resC2 = calcC2();
-      const resC3W = calcC3W();
-      const resC3Bsa = calcC3Bsa();
-      const resC4 = calcC4();
-      const resC6 = calcC6();
-      const resC7 = calcC7();
-      const resC8 = calcC8();
-      const resC10 = calcC10();
-      const resC11 = calcC11();
-      const resC13 = calcC13();
-      const resC14 = calcC14();
+      const resC13 = (((parseFloat(c13VolumeMl) || 0) * (parseFloat(c13DropFactor) || 15)) / ((parseFloat(c13TimeHours) || 1) * 60)).toFixed(0);
+
+      const naclReq = 0.009 * (parseFloat(c14VolMl) || 0);
+      const naclFromDrug = (parseFloat(c14DrugG) || 0) * (parseFloat(c14EValue) || 0);
+      const resC14 = (naclReq - naclFromDrug > 0 ? naclReq - naclFromDrug : 0).toFixed(3);
+
+      const resC15 = ((parseFloat(c15Pka) || 0) + Math.log10((parseFloat(c15Salt) || 0.1) / (parseFloat(c15Acid) || 0.1))).toFixed(2);
+
+      const tVal = parseFloat(c16Temp) || 0;
+      const resC16 = c16Scale === 'C' ? ((tVal * 9/5) + 32).toFixed(1) + ' °F' : (((tVal - 32) * 5/9)).toFixed(1) + ' °C';
+
+      const resC17 = ((parseFloat(c17K) || 5) / (parseFloat(c17M) || 1)).toFixed(2);
+
+      const kVal = parseFloat(c18K) || 0.001;
+      const resC18_t90 = c18Order === '0' ? ((0.1 * (parseFloat(c18C0) || 100)) / kVal).toFixed(1) : (0.105 / kVal).toFixed(1);
+
+      const calcMkt = () => {
+        try {
+          const arr = c19Temps.split(',').map(s => parseFloat(s.trim()) + 273.15).filter(n => !isNaN(n));
+          if (arr.length === 0) return '0';
+          const dH_R = 83.144 / 0.0083144; // standard 83.144 kJ/mol
+          const sumExp = arr.reduce((acc, t) => acc + Math.exp(-dH_R / t), 0);
+          const mktK = -dH_R / Math.log(sumExp / arr.length);
+          return (mktK - 273.15).toFixed(2);
+        } catch(e) { return '0'; }
+      };
+      const resC19 = calcMkt();
 
       return (
         <div className={`min-h-screen transition-colors duration-300 ${
-          isDark 
-            ? 'bg-[#181a1f] text-slate-100' 
-            : 'bg-gradient-to-br from-[#f1ede6] via-[#f7f5f0] to-[#e8e2d8] text-slate-800'
+          isDark ? 'bg-[#181a1f] text-slate-100' : 'bg-gradient-to-br from-[#f1ede6] via-[#f7f5f0] to-[#e8e2d8] text-slate-800'
         } font-sans pb-10`}>
           
           <div className="max-w-[1720px] mx-auto p-3 sm:p-5 md:p-7 flex flex-col gap-5">
@@ -354,7 +283,7 @@
                   <div className="flex items-center gap-2">
                     <h1 className="text-xl sm:text-2xl font-bold tracking-tight">เภสัชคำนวณทางเภสัชกรรมปฏิบัติ</h1>
                     <span className="text-xs px-2.5 py-0.5 rounded-full font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                      PWA Offline Ready
+                      USP-NF &lt;1160&gt; ครบ 21 บท
                     </span>
                   </div>
                   <p className={`text-xs sm:text-sm mt-0.5 ${isDark ? 'text-slate-400' : 'text-stone-500'}`}>
@@ -364,55 +293,32 @@
               </div>
 
               <div className="flex items-center gap-3">
-                <a
-                  href={pdfDownloadUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-medium text-xs sm:text-sm border transition-all duration-200 shadow-sm ${
-                    isDark ? 'bg-amber-500/15 border-amber-500/30 text-amber-300 hover:bg-amber-500/25' : 'bg-amber-50 border-amber-200 text-amber-800 hover:bg-amber-100'
-                  }`}
-                >
+                <a href={pdfDownloadUrl} target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-medium text-xs sm:text-sm border transition-all duration-200 shadow-sm ${
+                  isDark ? 'bg-amber-500/15 border-amber-500/30 text-amber-300' : 'bg-amber-50 border-amber-200 text-amber-800'
+                }`}>
                   <Icons.Download className="w-4 h-4 text-amber-500" />
                   <span>ดาวน์โหลดตำรา (PDF)</span>
                   <Icons.ExternalLink className="w-3.5 h-3.5 opacity-60" />
                 </a>
 
-                {/* Dark/Light Capsule Toggle */}
                 <div className={`flex items-center p-1 rounded-2xl border shadow-inner ${
                   isDark ? 'bg-slate-800/80 border-slate-700' : 'bg-stone-200/70 border-stone-300/60'
                 }`}>
-                  <button
-                    onClick={() => setIsDark(false)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${
-                      !isDark ? 'bg-white text-stone-800 shadow-sm' : 'text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
-                    <Icons.Sun className="w-3.5 h-3.5 text-amber-500" />
-                    <span className="hidden sm:inline">Light</span>
+                  <button onClick={() => setIsDark(false)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${!isDark ? 'bg-white text-stone-800 shadow-sm' : 'text-slate-400'}`}>
+                    <Icons.Sun className="w-3.5 h-3.5 text-amber-500" /> Light
                   </button>
-                  <button
-                    onClick={() => setIsDark(true)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${
-                      isDark ? 'bg-slate-700 text-white shadow-sm' : 'text-stone-500 hover:text-stone-800'
-                    }`}
-                  >
-                    <Icons.Moon className="w-3.5 h-3.5 text-indigo-400" />
-                    <span className="hidden sm:inline">Dark</span>
+                  <button onClick={() => setIsDark(true)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${isDark ? 'bg-slate-700 text-white shadow-sm' : 'text-stone-500'}`}>
+                    <Icons.Moon className="w-3.5 h-3.5 text-indigo-400" /> Dark
                   </button>
                 </div>
 
-                <button
-                  onClick={() => setIsTocOpenMobile(!isTocOpenMobile)}
-                  className={`lg:hidden p-2.5 rounded-2xl border transition-all ${
-                    isDark ? 'bg-slate-800/80 border-slate-700 text-slate-200' : 'bg-white/80 border-stone-200 text-stone-700'
-                  }`}
-                >
-                  {isTocOpenMobile ? <Icons.X className="w-5 h-5" /> : <Icons.Menu className="w-5 h-5" />}
+                <button onClick={() => setIsTocOpenMobile(!isTocOpenMobile)} className="lg:hidden p-2.5 rounded-2xl border dark:bg-slate-800">
+                  <Icons.BookOpen className="w-5 h-5 text-amber-500" />
                 </button>
               </div>
             </header>
 
-            {/* Top Navigation Menu (Horizontal Capsule Bar) */}
+            {/* Top Navigation Menu (เลื่อนได้ครบทุกบท) */}
             <nav className={`rounded-2xl p-2 backdrop-blur-2xl border transition-all duration-300 shadow-lg ${
               isDark ? 'bg-slate-900/40 border-slate-800' : 'bg-white/50 border-white/60'
             }`}>
@@ -427,9 +333,7 @@
                       className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 ${
                         isActive
                           ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-orange-500/20'
-                          : isDark
-                            ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                            : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
+                          : isDark ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60' : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
                       }`}
                     >
                       <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'opacity-70'}`} />
@@ -440,342 +344,387 @@
               </div>
             </nav>
 
-            {/* Main Workspace */}
+            {/* Main Content Workspace */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               
               <main className="lg:col-span-8 flex flex-col gap-6">
 
-                {/* TAB 1: บทที่ 2 ปริมาณตัวยา W = AB/CD */}
-                {activeTab === 'chap2' && (
-                  <section className={`rounded-3xl p-5 sm:p-7 backdrop-blur-2xl border transition-all shadow-xl ${
-                    isDark ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white/70 border-white/80'
-                  }`}>
-                    <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-stone-200/40 dark:border-slate-800">
-                      <div>
-                        <span className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">บทที่ 2</span>
-                        <h2 className="text-lg sm:text-xl font-bold">ปริมาณสารออกฤทธิ์ทางเภสัชวิทยา (Theoretical Weight)</h2>
-                        <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-stone-500'}`}>
-                          <code>W = (A × B) / (C × D)</code> คำนวณเกลือ, ไฮเดรต และชดเชยความชื้น Loss on Drying
-                        </p>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => { setC2Moiety('250'); setC2MwIngredient('456'); setC2MwMoiety('360'); setC2LossOnDrying('0.4'); setC2UseMoisture(true); }}
-                          className="px-3 py-1.5 rounded-xl text-xs font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
-                        >
-                          Theophylline dihydrate
-                        </button>
+                {/* กล่องคำนวณแต่ละบท */}
+                <section className={`rounded-3xl p-5 sm:p-7 backdrop-blur-2xl border transition-all shadow-xl ${
+                  isDark ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white/70 border-white/80'
+                }`}>
+
+                  {/* บทที่ 2 */}
+                  {activeTab === 'chap2' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 2: ปริมาณสารออกฤทธิ์ W = (A × B) / (C × D)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">A: Moiety ที่ต้องการ (mg)</label><input type="number" value={c2Moiety} onChange={e => setC2Moiety(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">B: MW สารที่ชั่งจริง (เกลือ/ไฮเดรต)</label><input type="number" value={c2MwIngredient} onChange={e => setC2MwIngredient(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">C: MW Active Moiety</label><input type="number" value={c2MwMoiety} onChange={e => setC2MwMoiety(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">Loss on Drying (% LOD):</label><input type="number" step="0.1" value={c2LossOnDrying} onChange={e => setC2LossOnDrying(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">น้ำหนักที่ต้องชั่งจริง (W):</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC2}</span>
+                          <span className="text-xs text-stone-400">mg</span>
+                        </div>
                       </div>
                     </div>
+                  )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-xs font-semibold mb-1.5">A: ปริมาณ Active Moiety ที่กำหนด</label>
-                          <input type="number" value={c2Moiety} onChange={e => setC2Moiety(e.target.value)} className={`w-full px-4 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-semibold mb-1.5">B: MW ของสารที่จะชั่งจริง (เกลือ/ไฮเดรต)</label>
-                          <input type="number" value={c2MwIngredient} onChange={e => setC2MwIngredient(e.target.value)} className={`w-full px-4 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-semibold mb-1.5">C: MW ของ Active Moiety</label>
-                          <input type="number" value={c2MwMoiety} onChange={e => setC2MwMoiety(e.target.value)} className={`w-full px-4 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                        </div>
-                        <div className="p-3 rounded-xl border border-stone-200 dark:border-slate-800 flex items-center justify-between">
-                          <span className="text-xs font-semibold">ชดเชยความชื้น (% LOD):</span>
-                          <input type="number" step="0.1" value={c2LossOnDrying} onChange={e => setC2LossOnDrying(e.target.value)} className={`w-20 px-2 py-1 rounded-lg border text-xs ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-stone-200'}`} />
-                        </div>
-                      </div>
-
-                      <div className={`rounded-2xl p-6 flex flex-col justify-between border ${isDark ? 'bg-slate-800/50 border-slate-700/60' : 'bg-stone-100/70 border-stone-200/80'}`}>
-                        <div>
-                          <span className="text-xs font-semibold text-stone-500">น้ำหนักที่ต้องชั่งจริง (W)</span>
-                          <div className="mt-2 flex items-baseline gap-2">
-                            <span className="text-5xl font-extrabold text-amber-600 dark:text-amber-400">{resC2.W}</span>
-                            <span className="text-sm text-stone-500">mg</span>
+                  {/* บทที่ 3.1 */}
+                  {activeTab === 'chap3w' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 3.1: ขนาดยาตามน้ำหนักตัว (Dosing by Weight)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div className="flex gap-2">
+                            <input type="number" value={c3Weight} onChange={e => setC3Weight(e.target.value)} className="flex-1 px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" />
+                            <select value={c3WeightUnit} onChange={e => setC3WeightUnit(e.target.value)} className="px-3 py-2 rounded-xl border text-xs dark:bg-slate-800"><option value="lb">lb</option><option value="kg">kg</option></select>
+                          </div>
+                          <div><label className="text-xs font-semibold">ขนาดยา (mg/kg/day):</label><input type="number" value={c3DoseRate} onChange={e => setC3DoseRate(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">แบ่งให้ (ครั้ง/วัน):</label><input type="number" value={c3DoseFreq} onChange={e => setC3DoseFreq(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div className="flex gap-2 text-xs items-center">
+                            <span>ความแรง:</span>
+                            <input type="number" value={c3StockMg} onChange={e => setC3StockMg(e.target.value)} className="w-16 px-2 py-1 border rounded dark:bg-slate-800" /> mg / 
+                            <input type="number" value={c3StockMl} onChange={e => setC3StockMl(e.target.value)} className="w-14 px-2 py-1 border rounded dark:bg-slate-800" /> mL
                           </div>
                         </div>
-                        <div className="text-xs text-stone-500 border-t pt-3 mt-4 border-stone-200 dark:border-slate-700">
-                          USP Double-Check Estimation: <strong>~{resC2.est} mg</strong>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">ปริมาตรยาน้ำต่อมื้อ:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC3W}</span>
+                          <span className="text-xs text-stone-400">mL / dose</span>
                         </div>
                       </div>
                     </div>
-                  </section>
-                )}
+                  )}
 
-                {/* TAB 2: บทที่ 3.1 ขนาดยาตามน้ำหนัก */}
-                {activeTab === 'chap3w' && (
-                  <section className={`rounded-3xl p-5 sm:p-7 backdrop-blur-2xl border transition-all shadow-xl ${
-                    isDark ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white/70 border-white/80'
-                  }`}>
-                    <div className="mb-6 pb-4 border-b border-stone-200/40 dark:border-slate-800">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">บทที่ 3.1</span>
-                      <h2 className="text-lg sm:text-xl font-bold">การให้ยาตามน้ำหนักตัว (Dosing by Body Weight)</h2>
+                  {/* บทที่ 3.2 */}
+                  {activeTab === 'chap3b' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 3.2: ขนาดยาตามพื้นที่ผิวกาย (Mosteller BSA)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">ความสูง (นิ้ว):</label><input type="number" value={c3Height} onChange={e => setC3Height(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">น้ำหนัก (ปอนด์):</label><input type="number" value={c3BsaWeight} onChange={e => setC3BsaWeight(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ขนาดยา (mg/m²):</label><input type="number" value={c3DosePerBsa} onChange={e => setC3DosePerBsa(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ความเข้มข้นยาฉีด (mg/mL):</label><input type="number" value={c3ConcPerMl} onChange={e => setC3ConcPerMl(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">ปริมาตรยาฉีดที่ต้องเตรียม:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC3Bsa}</span>
+                          <span className="text-xs text-stone-400">mL (BSA: {bsa.toFixed(2)} m²)</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-xs font-semibold mb-1.5">น้ำหนักตัว (lb หรือ kg)</label>
+                  )}
+
+                  {/* บทที่ 4 */}
+                  {activeTab === 'chap4' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 4: หน่วยความแรงทางชีวภาพ (Biological Potency Units)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">จำนวนยูนิตที่ต้องการ (Units):</label><input type="number" value={c4TotalUnits} onChange={e => setC4TotalUnits(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ความแรงวัตถุดิบ (Units / mg):</label><input type="number" value={c4PotencyUnitsPerMg} onChange={e => setC4PotencyUnitsPerMg(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">น้ำหนักที่ต้องชั่งจริง:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC4}</span>
+                          <span className="text-xs text-stone-400">mg</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 6 */}
+                  {activeTab === 'chap6' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 6: ความหนาแน่นและค่าถ่วงจำเพาะ (Density & Specific Gravity)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">ความเข้มข้น (% w/w):</label><input type="number" value={c6PcntWw} onChange={e => setC6PcntWw(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">Specific Gravity (SG):</label><input type="number" step="0.01" value={c6Sg} onChange={e => setC6Sg(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ปริมาตร (mL):</label><input type="number" value={c6TargetVolMl} onChange={e => setC6TargetVolMl(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">เนื้อสารบริสุทธิ์:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC6}</span>
+                          <span className="text-xs text-stone-400">กรัม (เทียบเท่า {wv.toFixed(2)}% w/v)</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 7 */}
+                  {activeTab === 'chap7' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 7: มิลลิสมมูลและมิลลิโมล (mEq & mmol)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">MW:</label><input type="number" value={c7Mw} onChange={e => setC7Mw(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">Valence:</label><input type="number" value={c7Valence} onChange={e => setC7Valence(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ขนาดยาต่อโดส (mg):</label><input type="number" value={c7DoseMg} onChange={e => setC7DoseMg(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">ปริมาณประจุไฟฟ้า:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC7}</span>
+                          <span className="text-xs text-stone-400">mEq</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 8 */}
+                  {activeTab === 'chap8' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 8: การเจือจาง Q1 × C1 = Q2 × C2</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">ปริมาณตั้งต้น (Q1):</label><input type="number" value={c8Q1} onChange={e => setC8Q1(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ความเข้มข้นตั้งต้น (C1 %):</label><input type="number" value={c8C1} onChange={e => setC8C1(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ความเข้มข้นที่ต้องการ (C2 %):</label><input type="number" value={c8C2} onChange={e => setC8C2(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">ปริมาณสารเจือจางที่ต้องเติมเพิ่ม:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC8}</span>
+                          <span className="text-xs text-stone-400">mL หรือ g</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 9 */}
+                  {activeTab === 'chap9' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 9: แอลกอฮอล์ เอทานอล และ Proof Gallon</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">Alcohol สต็อกที่มี (% v/v):</label><input type="number" value={c9StockAlc} onChange={e => setC9StockAlc(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">Alcohol ที่ต้องการ (% v/v):</label><input type="number" value={c9TargetAlc} onChange={e => setC9TargetAlc(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ปริมาตรตำรับสุดท้าย (mL):</label><input type="number" value={c9TargetVol} onChange={e => setC9TargetVol(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">ปริมาตรสต็อก {c9StockAlc}% ที่ต้องตวง:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC9}</span>
+                          <span className="text-xs text-stone-400">mL (Proof = {(parseFloat(c9TargetAlc)*2).toFixed(0)} Proof)</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 10 */}
+                  {activeTab === 'chap10' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 10: Alligation Alternate (การผสมสัดส่วนไขว้)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-2 gap-2">
+                            <div><label className="text-xs font-semibold">High (%)</label><input type="number" value={c10High} onChange={e => setC10High(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                            <div><label className="text-xs font-semibold">Low (%)</label><input type="number" value={c10Low} onChange={e => setC10Low(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          </div>
+                          <div><label className="text-xs font-semibold">Target (%)</label><input type="number" value={c10Target} onChange={e => setC10Target(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ปริมาณรวมที่ต้องการ (mL หรือ g):</label><input type="number" value={c10TotalQty} onChange={e => setC10TotalQty(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <div className="w-full space-y-2 text-center">
+                            <div>ตัวยา {c10High}%: <strong className="text-2xl text-emerald-600">{resC10H}</strong> ส่วน</div>
+                            <div>ตัวยา {c10Low}%: <strong className="text-2xl text-cyan-600">{resC10L}</strong> ส่วน</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 11 */}
+                  {activeTab === 'chap11' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 11: การเจือจางแบบ Aliquot (Aliquot Dilution)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">Sensitivity Requirement - SR (mg):</label><input type="number" value={c11Sensitivity} onChange={e => setC11Sensitivity(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">% Error สูงสุด:</label><input type="number" value={c11MaxError} onChange={e => setC11MaxError(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ตัวยาที่ต้องการจริง (mg):</label><input type="number" value={c11DrugNeeded} onChange={e => setC11DrugNeeded(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">น้ำหนักผสมรวม (ยา+Diluent) (mg):</label><input type="number" value={c11TotalMixture} onChange={e => setC11TotalMixture(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">น้ำหนัก Aliquot ที่ต้องแบ่งชั่ง:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC11}</span>
+                          <span className="text-xs text-stone-400">mg (LWQ = {lwq} mg)</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 12 */}
+                  {activeTab === 'chap12' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 12: ปริมาตรผงยาแทนที่ในของเหลว (Powder Volume Displacement)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">ปริมาตรตำรับสุดท้ายที่ได้ (mL):</label><input type="number" value={c12TotalVol} onChange={e => setC12TotalVol(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ปริมาตรน้ำที่เติมเข้าไปจริง (mL):</label><input type="number" value={c12WaterAdded} onChange={e => setC12WaterAdded(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">ปริมาตรการแทนที่ของผงยา:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC12}</span>
+                          <span className="text-xs text-stone-400">mL (Powder Volume)</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 13 */}
+                  {activeTab === 'chap13' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 13: อัตราการให้ยาทางหลอดเลือดดำ (IV Flow Rate)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">ปริมาตรสารละลาย (mL):</label><input type="number" value={c13VolumeMl} onChange={e => setC13VolumeMl(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">เวลาบริหารยา (ชม.):</label><input type="number" value={c13TimeHours} onChange={e => setC13TimeHours(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">Drop Factor (gtt/mL):</label><input type="number" value={c13DropFactor} onChange={e => setC13DropFactor(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">อัตราหยดทางสายน้ำเกลือ:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC13}</span>
+                          <span className="text-xs text-stone-400">หยดต่อนาที (gtt/min)</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 14 */}
+                  {activeTab === 'chap14' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 14: ออสโมลาริตี โทนิซิตี และค่า E-Value</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">น้ำหนักตัวยาในสูตร (กรัม):</label><input type="number" value={c14DrugG} onChange={e => setC14DrugG(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ค่า E-Value เทียบเท่า NaCl:</label><input type="number" step="0.01" value={c14EValue} onChange={e => setC14EValue(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ปริมาตรตำรับ (mL):</label><input type="number" value={c14VolMl} onChange={e => setC14VolMl(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">น้ำหนัก NaCl ที่ต้องเติมเพิ่ม:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC14}</span>
+                          <span className="text-xs text-stone-400">กรัม เพื่อให้เป็น Isotonic Solution</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 15 */}
+                  {activeTab === 'chap15' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 15: บัฟเฟอร์ Henderson-Hasselbalch</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">pKa ของกรด:</label><input type="number" step="0.01" value={c15Pka} onChange={e => setC15Pka(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ความเข้มข้นเกลือ [Salt] (M):</label><input type="number" step="0.01" value={c15Salt} onChange={e => setC15Salt(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">ความเข้มข้นกรด [Acid] (M):</label><input type="number" step="0.01" value={c15Acid} onChange={e => setC15Acid(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">ค่า pH ของสารละลายบัฟเฟอร์:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC15}</span>
+                          <span className="text-xs text-stone-400">pH = pKa + log([Salt]/[Acid])</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 16 */}
+                  {activeTab === 'chap16' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 16: การแปลงหน่วยอุณหภูมิ (°C / °F / K)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
                           <div className="flex gap-2">
-                            <input type="number" value={c3Weight} onChange={e => setC3Weight(e.target.value)} className={`flex-1 px-4 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                            <select value={c3WeightUnit} onChange={e => setC3WeightUnit(e.target.value)} className="px-3 py-2 rounded-xl border text-xs font-semibold dark:bg-slate-800">
-                              <option value="lb">lb</option>
-                              <option value="kg">kg</option>
+                            <input type="number" value={c16Temp} onChange={e => setC16Temp(e.target.value)} className="flex-1 px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" />
+                            <select value={c16Scale} onChange={e => setC16Scale(e.target.value)} className="px-3 py-2 rounded-xl border text-xs dark:bg-slate-800"><option value="C">°C</option><option value="F">°F</option></select>
+                          </div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">อุณหภูมิที่แปลงได้:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC16}</span>
+                          <span className="text-xs text-stone-400">{(tVal + (c16Scale === 'C' ? 273.15 : 0)).toFixed(1)} K</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 17 */}
+                  {activeTab === 'chap17' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 17: ขีดจำกัดเอนโดท็อกซิน (Endotoxin Limit = K / M)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div><label className="text-xs font-semibold">K: Threshold Pyrogenic Dose (EU/kg):</label><input type="number" value={c17K} onChange={e => setC17K(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">M: ขนาดยาสูงสุดต่อชั่วโมง (mg/kg/hr หรือ units/kg/hr):</label><input type="number" value={c17M} onChange={e => setC17M(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                        </div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">Endotoxin Limit:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC17}</span>
+                          <span className="text-xs text-stone-400">EU / หน่วยขนาดยา</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 18 */}
+                  {activeTab === 'chap18' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 18: เสถียรภาพยาและวันหมดอายุ (t90)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <div>
+                            <label className="text-xs font-semibold">อันดับปฏิกิริยา (Reaction Order):</label>
+                            <select value={c18Order} onChange={e => setC18Order(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-xs dark:bg-slate-800">
+                              <option value="1">First-Order (ln C = ln C0 - kt)</option>
+                              <option value="0">Zero-Order (C = C0 - kt)</option>
                             </select>
                           </div>
+                          <div><label className="text-xs font-semibold">ค่าคงที่อัตราเร็ว k (day⁻¹):</label><input type="number" step="0.0001" value={c18K} onChange={e => setC18K(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          {c18Order === '0' && <div><label className="text-xs font-semibold">ความเข้มข้นตั้งต้น C0:</label><input type="number" value={c18C0} onChange={e => setC18C0(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>}
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-xs font-semibold mb-1">ขนาดยา (mg/kg/day)</label>
-                            <input type="number" value={c3DoseRate} onChange={e => setC3DoseRate(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold mb-1">แบ่ง (ครั้ง/วัน)</label>
-                            <input type="number" value={c3DoseFreq} onChange={e => setC3DoseFreq(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                          </div>
-                        </div>
-                      </div>
-                      <div className={`rounded-2xl p-6 border flex flex-col justify-between ${isDark ? 'bg-slate-800/50 border-slate-700/60' : 'bg-stone-100/70 border-stone-200/80'}`}>
-                        <div>
-                          <span className="text-xs font-semibold text-stone-500">ปริมาตรยาน้ำต่อมื้อ</span>
-                          <div className="mt-2 text-5xl font-extrabold text-amber-600 dark:text-amber-400">{resC3W.mlPerDose} <span className="text-sm font-normal text-stone-500">mL/dose</span></div>
-                        </div>
-                        <div className="text-xs text-stone-400 space-y-1 mt-4">
-                          <div>รวมต่อวัน: {resC3W.totalMgPerDay} mg/day</div>
-                          <div>ต่อมื้อ: {resC3W.mgPerDose} mg/dose</div>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">อายุยาคงเหลือ 90% (t90):</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC18_t90}</span>
+                          <span className="text-xs text-stone-400">วัน (Shelf-life)</span>
                         </div>
                       </div>
                     </div>
-                  </section>
-                )}
+                  )}
 
-                {/* TAB 3: บทที่ 3.2 BSA */}
-                {activeTab === 'chap3b' && (
-                  <section className={`rounded-3xl p-5 sm:p-7 backdrop-blur-2xl border transition-all shadow-xl ${
-                    isDark ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white/70 border-white/80'
-                  }`}>
-                    <div className="mb-6 pb-4 border-b border-stone-200/40 dark:border-slate-800">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">บทที่ 3.2 - 3.3</span>
-                      <h2 className="text-lg sm:text-xl font-bold">ขนาดยาตามพื้นที่ผิวกาย (Body Surface Area - BSA)</h2>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-3">
+                  {/* บทที่ 19 */}
+                  {activeTab === 'chap19' && (
+                    <div>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 19: อุณหภูมิเฉลี่ยจลนพลศาสตร์ (Mean Kinetic Temperature - MKT)</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
                           <div>
-                            <label className="block text-xs font-semibold mb-1">ความสูง (in / cm)</label>
-                            <input type="number" value={c3Height} onChange={e => setC3Height(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
+                            <label className="text-xs font-semibold">ชุดอุณหภูมิ (°C คั่นด้วยจุลภาค):</label>
+                            <input type="text" value={c19Temps} onChange={e => setC19Temps(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" />
                           </div>
-                          <div>
-                            <label className="block text-xs font-semibold mb-1">น้ำหนัก (lb / kg)</label>
-                            <input type="number" value={c3BsaWeight} onChange={e => setC3BsaWeight(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                          </div>
+                          <p className="text-[11px] text-stone-400">คำนวณตามสมการ USP Arrhenius Activation Energy (ΔH = 83.144 kJ/mol)</p>
                         </div>
-                        <div>
-                          <label className="block text-xs font-semibold mb-1">ขนาดยาตาม BSA (mg/m²)</label>
-                          <input type="number" value={c3DosePerBsa} onChange={e => setC3DosePerBsa(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                        </div>
-                      </div>
-                      <div className={`rounded-2xl p-6 border flex flex-col justify-between ${isDark ? 'bg-slate-800/50 border-slate-700/60' : 'bg-stone-100/70 border-stone-200/80'}`}>
-                        <div>
-                          <span className="text-xs font-semibold text-stone-500">BSA คำนวณได้</span>
-                          <div className="mt-2 text-5xl font-extrabold text-amber-600 dark:text-amber-400">{resC3Bsa.bsa} <span className="text-sm font-normal text-stone-500">m²</span></div>
-                        </div>
-                        <div className="text-xs text-stone-400 mt-4">
-                          ขนาดยารวมที่ต้องได้รับ: <strong>{resC3Bsa.totalDoseMg} mg</strong>
+                        <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
+                          <span className="text-xs text-stone-500">MKT คำนวณได้:</span>
+                          <span className="text-5xl font-extrabold text-amber-600 my-2">{resC19}</span>
+                          <span className="text-xs text-stone-400">°C</span>
                         </div>
                       </div>
                     </div>
-                  </section>
-                )}
+                  )}
 
-                {/* TAB 8: บทที่ 10 Alligation Alternate */}
-                {activeTab === 'chap10' && (
-                  <section className={`rounded-3xl p-5 sm:p-7 backdrop-blur-2xl border transition-all shadow-xl ${
-                    isDark ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white/70 border-white/80'
-                  }`}>
-                    <div className="mb-6 pb-4 border-b border-stone-200/40 dark:border-slate-800">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">บทที่ 10</span>
-                      <h2 className="text-lg sm:text-xl font-bold">Alligation Alternate (การผสมสัดส่วนไขว้)</h2>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-xs font-semibold mb-1 text-emerald-500">High Strength (%)</label>
-                            <input type="number" value={c10High} onChange={e => setC10High(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold mb-1 text-cyan-500">Low Strength (%)</label>
-                            <input type="number" value={c10Low} onChange={e => setC10Low(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-xs font-semibold mb-1 text-amber-500">Target Strength (%)</label>
-                          <input type="number" value={c10Target} onChange={e => setC10Target(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-semibold mb-1">ปริมาตร/น้ำหนักรวมที่ต้องการ (mL หรือ g)</label>
-                          <input type="number" value={c10TotalQty} onChange={e => setC10TotalQty(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                        </div>
-                      </div>
-
-                      <div className={`rounded-2xl p-6 border flex flex-col justify-between ${isDark ? 'bg-slate-800/50 border-slate-700/60' : 'bg-stone-100/70 border-stone-200/80'}`}>
-                        <div>
-                          <span className="text-xs font-semibold text-stone-500">สัดส่วนที่ต้องใช้จริง:</span>
-                          <div className="grid grid-cols-2 gap-3 mt-4">
-                            <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-stone-200/40 dark:border-slate-800">
-                              <span className="text-[11px] text-stone-400 block">ตัวยา {c10High}%</span>
-                              <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{resC10.qtyH}</span>
-                              <span className="text-xs text-stone-400 ml-1">ส่วน</span>
-                            </div>
-                            <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-stone-200/40 dark:border-slate-800">
-                              <span className="text-[11px] text-stone-400 block">ตัวยา {c10Low}%</span>
-                              <span className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">{resC10.qtyL}</span>
-                              <span className="text-xs text-stone-400 ml-1">ส่วน</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-xs text-stone-400 mt-4">
-                          Alligation Parts: {resC10.partH} ส่วน ต่อ {resC10.partL} ส่วน (รวม {resC10.totalParts} ส่วน)
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                )}
-
-                {/* TAB 9: บทที่ 11 Aliquot Dilution */}
-                {activeTab === 'chap11' && (
-                  <section className={`rounded-3xl p-5 sm:p-7 backdrop-blur-2xl border transition-all shadow-xl ${
-                    isDark ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white/70 border-white/80'
-                  }`}>
-                    <div className="mb-6 pb-4 border-b border-stone-200/40 dark:border-slate-800">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">บทที่ 11</span>
-                      <h2 className="text-lg sm:text-xl font-bold">การเจือจางแบบ Aliquot (Aliquot Dilution)</h2>
-                      <p className={`text-xs mt-1 ${isDark ? 'text-slate-400' : 'text-stone-500'}`}>
-                        แก้ปัญหาการชั่งสารปริมาณน้อยกว่า Least Weighable Quantity (LWQ) เพื่อควบคุม Error ไม่เกิน 5%
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-xs font-semibold mb-1">Sensitivity Req. - SR (mg)</label>
-                            <input type="number" value={c11Sensitivity} onChange={e => setC11Sensitivity(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold mb-1">% Error ที่ยอมรับได้</label>
-                            <input type="number" value={c11MaxError} onChange={e => setC11MaxError(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-xs font-semibold mb-1">ปริมาณตัวยาที่ต้องการชั่งจริง (mg)</label>
-                          <input type="number" value={c11DrugNeeded} onChange={e => setC11DrugNeeded(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-semibold mb-1">น้ำหนักสารผสมรวม (ยา + Diluent) (mg)</label>
-                          <input type="number" value={c11DiluentWeighed} onChange={e => setC11DiluentWeighed(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                        </div>
-                      </div>
-                      <div className={`rounded-2xl p-6 border flex flex-col justify-between ${isDark ? 'bg-slate-800/50 border-slate-700/60' : 'bg-stone-100/70 border-stone-200/80'}`}>
-                        <div>
-                          <span className="text-xs font-semibold text-stone-500">น้ำหนัก Aliquot ที่ต้องแบ่งชั่ง</span>
-                          <div className="mt-2 text-5xl font-extrabold text-amber-600 dark:text-amber-400">{resC11.aliquotWeight} <span className="text-sm font-normal text-stone-500">mg</span></div>
-                        </div>
-                        <div className="text-xs text-stone-400 space-y-1 mt-4">
-                          <div>Least Weighable Quantity (LWQ): <strong>{resC11.lwq} mg</strong></div>
-                          <div>ชั่งตัวยาสำคัญเริ่มต้น: <strong>{resC11.drugWeighed} mg</strong></div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                )}
-
-                {/* TAB 10: บทที่ 13 IV Flow Rate */}
-                {activeTab === 'chap13' && (
-                  <section className={`rounded-3xl p-5 sm:p-7 backdrop-blur-2xl border transition-all shadow-xl ${
-                    isDark ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white/70 border-white/80'
-                  }`}>
-                    <div className="mb-6 pb-4 border-b border-stone-200/40 dark:border-slate-800">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">บทที่ 13</span>
-                      <h2 className="text-lg sm:text-xl font-bold">อัตราการให้ยาทางหลอดเลือดดำ (IV Flow Rates)</h2>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-xs font-semibold mb-1">ปริมาตรสารละลายทั้งหมด (mL)</label>
-                          <input type="number" value={c13VolumeMl} onChange={e => setC13VolumeMl(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-xs font-semibold mb-1">ระยะเวลาให้ (ชั่วโมง)</label>
-                            <input type="number" value={c13TimeHours} onChange={e => setC13TimeHours(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold mb-1">Drop Factor (gtt/mL)</label>
-                            <input type="number" value={c13DropFactor} onChange={e => setC13DropFactor(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                          </div>
-                        </div>
-                      </div>
-                      <div className={`rounded-2xl p-6 border flex flex-col justify-between ${isDark ? 'bg-slate-800/50 border-slate-700/60' : 'bg-stone-100/70 border-stone-200/80'}`}>
-                        <div>
-                          <span className="text-xs font-semibold text-stone-500">อัตราการหยด (Gravity Infusion)</span>
-                          <div className="mt-2 text-5xl font-extrabold text-amber-600 dark:text-amber-400">{resC13.gttPerMin} <span className="text-sm font-normal text-stone-500">gtt/min</span></div>
-                        </div>
-                        <div className="text-xs text-stone-400 mt-4">
-                          อัตราสำหรับเครื่อง Infusion Pump: <strong>{resC13.mlPerHour} mL/hr</strong>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                )}
-
-                {/* TAB 11: บทที่ 14 Tonicity E-Value */}
-                {activeTab === 'chap14' && (
-                  <section className={`rounded-3xl p-5 sm:p-7 backdrop-blur-2xl border transition-all shadow-xl ${
-                    isDark ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white/70 border-white/80'
-                  }`}>
-                    <div className="mb-6 pb-4 border-b border-stone-200/40 dark:border-slate-800">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">บทที่ 14</span>
-                      <h2 className="text-lg sm:text-xl font-bold">โทนิซิตีและค่าเทียบเท่าโซเดียมคลอไรด์ (E-Value)</h2>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-xs font-semibold mb-1">น้ำหนักตัวยาในตำรับ (กรัม)</label>
-                          <input type="number" value={c14DrugWeightG} onChange={e => setC14DrugWeightG(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-xs font-semibold mb-1">E-Value ของตัวยา</label>
-                            <input type="number" step="0.01" value={c14EValue} onChange={e => setC14EValue(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold mb-1">ปริมาตรตำรับ (mL)</label>
-                            <input type="number" value={c14FinalVolumeMl} onChange={e => setC14FinalVolumeMl(e.target.value)} className={`w-full px-3 py-2 rounded-xl border text-sm ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-stone-50 border-stone-200'}`} />
-                          </div>
-                        </div>
-                      </div>
-                      <div className={`rounded-2xl p-6 border flex flex-col justify-between ${isDark ? 'bg-slate-800/50 border-slate-700/60' : 'bg-stone-100/70 border-stone-200/80'}`}>
-                        <div>
-                          <span className="text-xs font-semibold text-stone-500">น้ำหนัก NaCl ที่ต้องเติมเพิ่ม</span>
-                          <div className="mt-2 text-5xl font-extrabold text-amber-600 dark:text-amber-400">{resC14.naclToAdd} <span className="text-sm font-normal text-stone-500">กรัม</span></div>
-                        </div>
-                        <div className="text-xs text-stone-400 space-y-1 mt-4">
-                          <div>ความตึงตัวเทียบเท่าจากตัวยา: {resC14.naclEquivFromDrug} g NaCl</div>
-                          <div>NaCl ที่ต้องการทั้งหมด: {resC14.naclNeededTotal} g NaCl</div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                )}
+                </section>
 
                 {/* Disclaimer */}
                 <div className={`rounded-3xl p-5 sm:p-6 backdrop-blur-xl border transition-all ${
                   isDark ? 'bg-slate-900/40 border-slate-800' : 'bg-white/40 border-white/60'
                 }`}>
                   <div className="flex items-start gap-3.5">
-                    <Icons.AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                    <Icons.ShieldAlert className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                     <div className="space-y-2 text-xs leading-relaxed">
                       <div className="font-bold flex items-center gap-2">
                         <span>Clinical & Compounding Practice Disclaimer</span>
@@ -786,16 +735,13 @@
                       <p className={isDark ? 'text-slate-400' : 'text-stone-600'}>
                         โปรแกรมนี้จัดทำขึ้นเพื่อเป็นเครื่องมือช่วยคำนวณทางเภสัชกรรมตามแนวทางมาตรฐานของ <strong>USP-NF &lt;1160&gt;</strong> สำหรับการปรุงยาและการจ่ายยา ผู้ปฏิบัติงานต้องทำการตรวจสอบความถูกต้องซ้ำ (Double-checking) และประมาณค่า (Estimation) ก่อนนำไปเตรียมยาจริงให้แก่ผู้ป่วยทุกครั้ง
                       </p>
-                      <div className="pt-2 border-t border-stone-200/40 dark:border-slate-800 text-[11px] text-stone-400">
-                        <strong>อ้างอิงตำรา:</strong> เภสัชคำนวณทางเภสัชกรรมปฏิบัติ ตาม USP-NF &lt;1160&gt; (พิมพ์ครั้งที่ 1, มิถุนายน 2569) • รศ.ดร.ภก. ภูริวัฒน์ ลี้สวัสดิ์ • คณะเภสัชศาสตร์ สถาบันวิทยาการประกอบการแห่งอโยธยา (IESA) • ISBN (e-Book): 978-616-95297-0-5
-                      </div>
                     </div>
                   </div>
                 </div>
 
               </main>
 
-              {/* Right Column: Table of Contents */}
+              {/* Right Sidebar TOC */}
               <aside className={`lg:col-span-4 rounded-3xl p-5 backdrop-blur-2xl border transition-all shadow-xl sticky top-6 ${
                 isDark ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white/70 border-white/80'
               } ${isTocOpenMobile ? 'block' : 'hidden lg:block'}`}>
@@ -827,21 +773,13 @@
                         className={`p-2.5 rounded-2xl border transition-all flex items-center justify-between gap-2 ${
                           isSupported
                             ? isSelected
-                              ? isDark
-                                ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 shadow-sm'
-                                : 'bg-amber-50 border-amber-200 text-amber-800 shadow-sm font-semibold'
-                              : isDark
-                                ? 'bg-slate-800/40 border-slate-800/80 hover:bg-slate-800 text-slate-300 cursor-pointer'
-                                : 'bg-white/50 border-stone-100 hover:bg-stone-50 text-stone-700 cursor-pointer'
-                            : isDark
-                              ? 'bg-transparent border-transparent text-slate-500'
-                              : 'bg-transparent border-transparent text-stone-400'
+                              ? 'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-500/20 dark:border-amber-500/40 dark:text-amber-300 shadow-sm font-semibold'
+                              : 'bg-white/50 border-stone-100 hover:bg-stone-50 text-stone-700 dark:bg-slate-800/40 dark:border-slate-800/80 dark:hover:bg-slate-800 dark:text-slate-300 cursor-pointer'
+                            : 'opacity-50'
                         }`}
                       >
                         <div className="flex items-center gap-2 min-w-0">
-                          <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-[10px] font-mono shrink-0 ${
-                            isSupported ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400' : 'bg-stone-200/40 dark:bg-slate-800 text-stone-400'
-                          }`}>
+                          <span className="w-5 h-5 rounded-lg flex items-center justify-center text-[10px] font-mono shrink-0 bg-amber-500/10 text-amber-600 dark:text-amber-400">
                             {item.num}
                           </span>
                           <span className="truncate">{item.title}</span>
@@ -849,36 +787,12 @@
 
                         <div className="flex items-center gap-1.5 shrink-0 text-[10px] text-stone-400 font-mono">
                           <span>น.{item.pages}</span>
-                          {isSupported && (
-                            <Icons.ChevronRight className={`w-3.5 h-3.5 ${isSelected ? 'text-amber-500' : 'opacity-40'}`} />
-                          )}
+                          {isSupported && <Icons.ChevronRight className="w-3.5 h-3.5" />}
                         </div>
                       </div>
                     );
                   })}
                 </div>
-
-                <div className={`mt-5 p-4 rounded-2xl border ${
-                  isDark ? 'bg-slate-800/40 border-slate-700/60' : 'bg-stone-50 border-stone-200/60'
-                }`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Icons.Bookmark className="w-4 h-4 text-amber-500" />
-                    <span className="text-xs font-bold">เอกสารอ้างอิงฉบับสมบูรณ์</span>
-                  </div>
-                  <p className="text-[11px] text-stone-400 leading-relaxed mb-3">
-                    ดาวน์โหลดไฟล์หนังสือ PDF ฉบับเต็ม 423 หน้า เพื่อศึกษาขั้นตอนและทฤษฎีจลนพลศาสตร์ฉบับละเอียด
-                  </p>
-                  <a
-                    href={pdfDownloadUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-amber-500 to-orange-400 hover:from-amber-600 hover:to-orange-500 shadow-md shadow-orange-500/20 transition-all"
-                  >
-                    <Icons.Download className="w-3.5 h-3.5" />
-                    <span>ดาวน์โหลด E-Book (PDF)</span>
-                  </a>
-                </div>
-
               </aside>
 
             </div>
