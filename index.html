@@ -73,7 +73,9 @@
       Thermometer: (props) => <IconWrapper {...props}><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></IconWrapper>,
       ShieldAlert: (props) => <IconWrapper {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></IconWrapper>,
       Clock: (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></IconWrapper>,
-      Gauge: (props) => <IconWrapper {...props}><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></IconWrapper>
+      Gauge: (props) => <IconWrapper {...props}><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></IconWrapper>,
+      Info: (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></IconWrapper>,
+      FileText: (props) => <IconWrapper {...props}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></IconWrapper>
     };
 
     function PharCalcWebApp() {
@@ -83,7 +85,7 @@
 
       const pdfDownloadUrl = "https://drive.google.com/file/d/1pCb2TKqvuzBXCaNr_Zr0GgFeXhA_Qcvj/view?usp=sharing";
 
-      // --- States บทที่ 2 ถึง 19 ---
+      // --- States บทคำนวณ ---
       const [c2Moiety, setC2Moiety] = useState('250');
       const [c2MwIngredient, setC2MwIngredient] = useState('456');
       const [c2MwMoiety, setC2MwMoiety] = useState('360');
@@ -148,21 +150,23 @@
       const [c16Temp, setC16Temp] = useState('25');
       const [c16Scale, setC16Scale] = useState('C');
 
-      const [c17K, setC17K] = useState('5'); // USP endotoxin threshold (EU/kg)
-      const [c17M, setC17M] = useState('10'); // Max dose per kg/hr
+      const [c17K, setC17K] = useState('5');
+      const [c17M, setC17M] = useState('10');
 
       const [c18Order, setC18Order] = useState('1');
-      const [c18K, setC18K] = useState('0.005'); // day^-1
+      const [c18K, setC18K] = useState('0.005');
       const [c18C0, setC18C0] = useState('100');
 
       const [c19Temps, setC19Temps] = useState('25, 28, 30, 26, 24, 29');
 
-      // --- Navigation Tabs ---
+      // --- Navigation Tabs (เมนูด้านบน แสดงทั้งหมวดคำนวณและหมวดเนื้อหา) ---
       const navTabs = [
+        { id: 'chap1', label: 'บทที่ 1: บทนำ USP <1160>', icon: Icons.FileText },
         { id: 'chap2', label: 'บทที่ 2: ปริมาณตัวยา (W=AB/CD)', icon: Icons.FlaskConical },
         { id: 'chap3w', label: 'บทที่ 3.1: ขนาดยาตามน้ำหนัก', icon: Icons.Scale },
         { id: 'chap3b', label: 'บทที่ 3.2: ขนาดยาตาม BSA', icon: Icons.Activity },
         { id: 'chap4', label: 'บทที่ 4: Potency Units', icon: Icons.Sparkles },
+        { id: 'chap5', label: 'บทที่ 5: ผลรวมปริมาตรและน้ำหนัก', icon: Icons.Info },
         { id: 'chap6', label: 'บทที่ 6: Density & SG', icon: Icons.Droplets },
         { id: 'chap7', label: 'บทที่ 7: mEq & mmol', icon: Icons.Layers },
         { id: 'chap8', label: 'บทที่ 8: เจือจาง (Q1C1=Q2C2)', icon: Icons.FlaskConical },
@@ -177,33 +181,36 @@
         { id: 'chap17', label: 'บทที่ 17: เอนโดท็อกซิน (K/M)', icon: Icons.ShieldAlert },
         { id: 'chap18', label: 'บทที่ 18: เสถียรภาพ & t90', icon: Icons.Clock },
         { id: 'chap19', label: 'บทที่ 19: อุณหภูมิเฉลี่ยจลน์ (MKT)', icon: Icons.Thermometer },
+        { id: 'chap20', label: 'บทที่ 20: ภาคผนวก', icon: Icons.FileText },
+        { id: 'chap21', label: 'บทที่ 21: บทสรุป', icon: Icons.BookOpen }
       ];
 
+      // --- สารบัญครบทั้ง 21 บท มี tabRef ผูกครบทุกบท ---
       const tocList = [
-        { num: 1, title: 'บทนำ (Introduction)', pages: '1-5', tabRef: null },
-        { num: 2, title: 'ปริมาณสารออกฤทธิ์ (Active Ingredients)', pages: '6-28', tabRef: 'chap2' },
-        { num: 3, title: 'การให้ยาตามน้ำหนัก และ พื้นที่ผิวกาย', pages: '29-43', tabRef: 'chap3w' },
-        { num: 4, title: 'หน่วยความแรงทางชีวภาพ (Potency Units)', pages: '44-47', tabRef: 'chap4' },
-        { num: 5, title: 'ผลรวมปริมาตร และน้ำหนัก (Volume Contraction)', pages: '48-52', tabRef: 'chap9' },
-        { num: 6, title: 'ความหนาแน่น และความถ่วงจำเพาะ (Density & SG)', pages: '53-61', tabRef: 'chap6' },
-        { num: 7, title: 'มิลลิอีคิววาเลนต์ และ มิลลิโมล (mEq & mmol)', pages: '62-75', tabRef: 'chap7' },
-        { num: 8, title: 'การแสดงความเข้มข้น (Concentration Expressions)', pages: '76-159', tabRef: 'chap8' },
-        { num: 9, title: 'แอลกอฮอล์ และเอทานอล (Alcohol and Ethanol)', pages: '160-169', tabRef: 'chap9' },
-        { num: 10, title: 'Alligation Alternate และ Algebra', pages: '170-184', tabRef: 'chap10' },
-        { num: 11, title: 'การเจือจางแบบ Aliquot (Aliquot Dilutions)', pages: '185-204', tabRef: 'chap11' },
-        { num: 12, title: 'ปริมาตรผงยาในของเหลว (Powder Volume)', pages: '205-209', tabRef: 'chap12' },
-        { num: 13, title: 'อัตราการไหลของยาทางหลอดเลือดดำ (IV Flow Rate)', pages: '210-217', tabRef: 'chap13' },
-        { num: 14, title: 'ออสโมลาริตี และ โทนิซิตี (Osmolarity & Tonicity)', pages: '218-230', tabRef: 'chap14' },
-        { num: 15, title: 'pH และ pH Buffers', pages: '231-254', tabRef: 'chap15' },
-        { num: 16, title: 'อุณหภูมิ (Temperatures)', pages: '255-267', tabRef: 'chap16' },
-        { num: 17, title: 'เอนโดท็อกซิน (Endotoxins)', pages: '268-275', tabRef: 'chap17' },
-        { num: 18, title: 'จลนพลศาสตร์ความคงตัว & ทำนายวันหมดอายุ', pages: '276-350', tabRef: 'chap18' },
-        { num: 19, title: 'อุณหภูมิเฉลี่ยจลนพลศาสตร์ (MKT)', pages: '351-396', tabRef: 'chap19' },
-        { num: 20, title: 'ภาคผนวก (Appendix)', pages: '397-413', tabRef: null },
-        { num: 21, title: 'บทสรุป (Summary)', pages: '414-423', tabRef: null },
+        { num: 1, title: 'บทนำ (Introduction)', pages: '1-5', tabRef: 'chap1', isCalc: false },
+        { num: 2, title: 'ปริมาณสารออกฤทธิ์ (Active Ingredients)', pages: '6-28', tabRef: 'chap2', isCalc: true },
+        { num: 3, title: 'การให้ยาตามน้ำหนัก และ พื้นที่ผิวกาย', pages: '29-43', tabRef: 'chap3w', isCalc: true },
+        { num: 4, title: 'หน่วยความแรงทางชีวภาพ (Potency Units)', pages: '44-47', tabRef: 'chap4', isCalc: true },
+        { num: 5, title: 'ผลรวมปริมาตร และน้ำหนัก (Volume Contraction)', pages: '48-52', tabRef: 'chap5', isCalc: false },
+        { num: 6, title: 'ความหนาแน่น และความถ่วงจำเพาะ (Density & SG)', pages: '53-61', tabRef: 'chap6', isCalc: true },
+        { num: 7, title: 'มิลลิอีคิววาเลนต์ และ มิลลิโมล (mEq & mmol)', pages: '62-75', tabRef: 'chap7', isCalc: true },
+        { num: 8, title: 'การแสดงความเข้มข้น (Concentration Expressions)', pages: '76-159', tabRef: 'chap8', isCalc: true },
+        { num: 9, title: 'แอลกอฮอล์ และเอทานอล (Alcohol & Ethanol)', pages: '160-169', tabRef: 'chap9', isCalc: true },
+        { num: 10, title: 'Alligation Alternate และ Algebra', pages: '170-184', tabRef: 'chap10', isCalc: true },
+        { num: 11, title: 'การเจือจางแบบ Aliquot (Aliquot Dilutions)', pages: '185-204', tabRef: 'chap11', isCalc: true },
+        { num: 12, title: 'ปริมาตรผงยาในของเหลว (Powder Volume)', pages: '205-209', tabRef: 'chap12', isCalc: true },
+        { num: 13, title: 'อัตราการไหลของยาทางหลอดเลือดดำ (IV Flow Rate)', pages: '210-217', tabRef: 'chap13', isCalc: true },
+        { num: 14, title: 'ออสโมลาริตี และ โทนิซิตี (Osmolarity & Tonicity)', pages: '218-230', tabRef: 'chap14', isCalc: true },
+        { num: 15, title: 'pH และ pH Buffers', pages: '231-254', tabRef: 'chap15', isCalc: true },
+        { num: 16, title: 'อุณหภูมิ (Temperatures)', pages: '255-267', tabRef: 'chap16', isCalc: true },
+        { num: 17, title: 'เอนโดท็อกซิน (Endotoxins)', pages: '268-275', tabRef: 'chap17', isCalc: true },
+        { num: 18, title: 'จลนพลศาสตร์ความคงตัว & ทำนายวันหมดอายุ', pages: '276-350', tabRef: 'chap18', isCalc: true },
+        { num: 19, title: 'อุณหภูมิเฉลี่ยจลนพลศาสตร์ (MKT)', pages: '351-396', tabRef: 'chap19', isCalc: true },
+        { num: 20, title: 'ภาคผนวก (Appendix)', pages: '397-413', tabRef: 'chap20', isCalc: false },
+        { num: 21, title: 'บทสรุป (Summary)', pages: '414-423', tabRef: 'chap21', isCalc: false },
       ];
 
-      // --- Calculations ---
+      // --- ผลการคำนวณ ---
       const A = parseFloat(c2Moiety) || 0, B = parseFloat(c2MwIngredient) || 0, C = parseFloat(c2MwMoiety) || 1;
       const D = 1 - ((parseFloat(c2LossOnDrying) || 0) / 100);
       const resC2 = (C * D !== 0 ? (A * B) / (C * D) : 0).toFixed(1);
@@ -256,7 +263,7 @@
         try {
           const arr = c19Temps.split(',').map(s => parseFloat(s.trim()) + 273.15).filter(n => !isNaN(n));
           if (arr.length === 0) return '0';
-          const dH_R = 83.144 / 0.0083144; // standard 83.144 kJ/mol
+          const dH_R = 83.144 / 0.0083144;
           const sumExp = arr.reduce((acc, t) => acc + Math.exp(-dH_R / t), 0);
           const mktK = -dH_R / Math.log(sumExp / arr.length);
           return (mktK - 273.15).toFixed(2);
@@ -283,7 +290,7 @@
                   <div className="flex items-center gap-2">
                     <h1 className="text-xl sm:text-2xl font-bold tracking-tight">เภสัชคำนวณทางเภสัชกรรมปฏิบัติ</h1>
                     <span className="text-xs px-2.5 py-0.5 rounded-full font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                      USP-NF &lt;1160&gt; ครบ 21 บท
+                      USP-NF &lt;1160&gt;
                     </span>
                   </div>
                   <p className={`text-xs sm:text-sm mt-0.5 ${isDark ? 'text-slate-400' : 'text-stone-500'}`}>
@@ -318,7 +325,7 @@
               </div>
             </header>
 
-            {/* Top Navigation Menu (เลื่อนได้ครบทุกบท) */}
+            {/* Top Navigation Menu (Horizontal Capsule Bar) */}
             <nav className={`rounded-2xl p-2 backdrop-blur-2xl border transition-all duration-300 shadow-lg ${
               isDark ? 'bg-slate-900/40 border-slate-800' : 'bg-white/50 border-white/60'
             }`}>
@@ -344,17 +351,42 @@
               </div>
             </nav>
 
-            {/* Main Content Workspace */}
+            {/* Main Workspace */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               
               <main className="lg:col-span-8 flex flex-col gap-6">
 
-                {/* กล่องคำนวณแต่ละบท */}
+                {/* กล่องแสดงผลตามแท็บที่เลือก */}
                 <section className={`rounded-3xl p-5 sm:p-7 backdrop-blur-2xl border transition-all shadow-xl ${
                   isDark ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white/70 border-white/80'
                 }`}>
 
-                  {/* บทที่ 2 */}
+                  {/* บทที่ 1: เนื้อหาบทนำ */}
+                  {activeTab === 'chap1' && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2 text-amber-600 font-bold text-sm">
+                        <Icons.FileText className="w-5 h-5" />
+                        <span>บทที่ 1: บทนำตามมาตรฐาน USP-NF &lt;1160&gt;</span>
+                      </div>
+                      <h2 className="text-xl font-bold">หลักการพื้นฐานและความแม่นยำในการคำนวณทางเภสัชกรรม</h2>
+                      <div className="text-sm leading-relaxed space-y-3 text-stone-600 dark:text-slate-300">
+                        <p>
+                          บททั่วไป <strong>USP-NF &lt;1160&gt; Pharmaceutical Calculations in Pharmacy Practice</strong> มีวัตถุประสงค์เพื่อให้แนวทางช่วยเหลือเภสัชกรและบุคลากรสนับสนุนในการคำนวณสำหรับการเตรียมยา (Compounding) และการจ่ายยา (Dispensing) ได้อย่างถูกต้องและแม่นยำสูงสุด
+                        </p>
+                        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-900 dark:text-amber-200 space-y-2">
+                          <div className="font-bold text-sm">ขั้นตอนก่อนดำเนินการคำนวณ (Pre-Calculation Steps):</div>
+                          <ul className="list-disc pl-5 space-y-1">
+                            <li>อ่านสูตรตำรับหรือใบสั่งยาให้ละเอียดถี่ถ้วนทั้งหมด</li>
+                            <li>กำหนดวัสดุ อุปกรณ์ และสารเคมีที่จำเป็นต้องใช้</li>
+                            <li>เลือกวิธีการเตรียมและวิธีคำนวณที่สมเหตุสมผล โดยใช้ขั้นตอนน้อยที่สุดเพื่อลดความผิดพลาด</li>
+                            <li><strong>Double-checking & Estimation:</strong> ตรวจสอบซ้ำและประมาณค่าตัวเลข (Rounding) เพื่อเช็คขนาดของคำตอบก่อนทำการผสมจริง</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 2: W = AB/CD */}
                   {activeTab === 'chap2' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 2: ปริมาณสารออกฤทธิ์ W = (A × B) / (C × D)</h2>
@@ -368,13 +400,13 @@
                         <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
                           <span className="text-xs text-stone-500">น้ำหนักที่ต้องชั่งจริง (W):</span>
                           <span className="text-5xl font-extrabold text-amber-600 my-2">{resC2}</span>
-                          <span className="text-xs text-stone-400">mg</span>
+                          <span className="text-xs text-stone-400">mg (คำนึงถึง Hydrate & LOD)</span>
                         </div>
                       </div>
                     </div>
                   )}
 
-                  {/* บทที่ 3.1 */}
+                  {/* บทที่ 3.1: Dosing by Weight */}
                   {activeTab === 'chap3w' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 3.1: ขนาดยาตามน้ำหนักตัว (Dosing by Weight)</h2>
@@ -387,7 +419,7 @@
                           <div><label className="text-xs font-semibold">ขนาดยา (mg/kg/day):</label><input type="number" value={c3DoseRate} onChange={e => setC3DoseRate(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
                           <div><label className="text-xs font-semibold">แบ่งให้ (ครั้ง/วัน):</label><input type="number" value={c3DoseFreq} onChange={e => setC3DoseFreq(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
                           <div className="flex gap-2 text-xs items-center">
-                            <span>ความแรง:</span>
+                            <span>ความแรงยา:</span>
                             <input type="number" value={c3StockMg} onChange={e => setC3StockMg(e.target.value)} className="w-16 px-2 py-1 border rounded dark:bg-slate-800" /> mg / 
                             <input type="number" value={c3StockMl} onChange={e => setC3StockMl(e.target.value)} className="w-14 px-2 py-1 border rounded dark:bg-slate-800" /> mL
                           </div>
@@ -401,10 +433,10 @@
                     </div>
                   )}
 
-                  {/* บทที่ 3.2 */}
+                  {/* บทที่ 3.2: Dosing by BSA */}
                   {activeTab === 'chap3b' && (
                     <div>
-                      <h2 className="text-lg font-bold mb-4">บทที่ 3.2: ขนาดยาตามพื้นที่ผิวกาย (Mosteller BSA)</h2>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 3.2: ขนาดยาตามพื้นที่ผิวกาย (BSA - Mosteller)</h2>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-3">
                           <div><label className="text-xs font-semibold">ความสูง (นิ้ว):</label><input type="number" value={c3Height} onChange={e => setC3Height(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
@@ -421,7 +453,7 @@
                     </div>
                   )}
 
-                  {/* บทที่ 4 */}
+                  {/* บทที่ 4: Potency Units */}
                   {activeTab === 'chap4' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 4: หน่วยความแรงทางชีวภาพ (Biological Potency Units)</h2>
@@ -439,7 +471,33 @@
                     </div>
                   )}
 
-                  {/* บทที่ 6 */}
+                  {/* บทที่ 5: เนื้อหาผลรวมปริมาตรและน้ำหนัก */}
+                  {activeTab === 'chap5' && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2 text-amber-600 font-bold text-sm">
+                        <Icons.Info className="w-5 h-5" />
+                        <span>บทที่ 5: ผลรวมของปริมาตรและน้ำหนัก (Volume and Weight Sums)</span>
+                      </div>
+                      <h2 className="text-xl font-bold">หลักการสำคัญด้านฟิสิกส์เคมีของสารผสม</h2>
+                      <div className="text-sm leading-relaxed space-y-3 text-stone-600 dark:text-slate-300">
+                        <div className="p-4 rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-stone-200 dark:border-slate-700">
+                          <strong className="text-stone-800 dark:text-slate-100 block mb-1">1. ผลรวมน้ำหนัก (Weights are Additive):</strong>
+                          น้ำหนักสามารถรวมกันได้เสมอในสารผสมทุกสถานะ (ของแข็ง, กึ่งของแข็ง, ของเหลว) น้ำหนักรวมจะเท่ากับผลบวกของน้ำหนักแต่ละส่วนประกอบเสมอ
+                        </div>
+                        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20">
+                          <strong className="text-amber-900 dark:text-amber-200 block mb-1">2. ปริมาตรอาจไม่รวมกันตรงๆ (Volumes May Not Be Additive):</strong>
+                          การผสมของเหลวบริสุทธิ์อาจเกิดการ <strong>หดตัวของปริมาตร (Volume Contraction)</strong> อันเนื่องมาจากการสร้างพันธะไฮโดรเจนและการคายความร้อน เช่น:
+                          <ul className="list-disc pl-5 mt-2 space-y-1 text-xs">
+                            <li>น้ำ 50 mL + เอทานอล 50 mL จะได้ปริมาตรรวมเพียง <strong>97–98 mL</strong> (หดตัว &lt; 5%) ที่อุณหภูมิ 20–25°C</li>
+                            <li>สารละลายที่มีแอลกอฮอล์โมโนไฮดรอกซีต่ำกว่า 10% การหดตัวจะน้อยมาก (&lt; 0.5%) จนสามารถถือว่ารวมกันได้โดยตรง</li>
+                            <li>โพลีออล เช่น Glycerin และ Propylene glycol จะเกิดการหดตัวน้อยมากเมื่อผสมกับน้ำ</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 6: Density & SG */}
                   {activeTab === 'chap6' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 6: ความหนาแน่นและค่าถ่วงจำเพาะ (Density & Specific Gravity)</h2>
@@ -458,26 +516,26 @@
                     </div>
                   )}
 
-                  {/* บทที่ 7 */}
+                  {/* บทที่ 7: mEq & mmol */}
                   {activeTab === 'chap7' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 7: มิลลิสมมูลและมิลลิโมล (mEq & mmol)</h2>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-3">
                           <div><label className="text-xs font-semibold">MW:</label><input type="number" value={c7Mw} onChange={e => setC7Mw(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
-                          <div><label className="text-xs font-semibold">Valence:</label><input type="number" value={c7Valence} onChange={e => setC7Valence(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">Valence (เวเลนซีสูงสุด):</label><input type="number" value={c7Valence} onChange={e => setC7Valence(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
                           <div><label className="text-xs font-semibold">ขนาดยาต่อโดส (mg):</label><input type="number" value={c7DoseMg} onChange={e => setC7DoseMg(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
                         </div>
                         <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
                           <span className="text-xs text-stone-500">ปริมาณประจุไฟฟ้า:</span>
                           <span className="text-5xl font-extrabold text-amber-600 my-2">{resC7}</span>
-                          <span className="text-xs text-stone-400">mEq</span>
+                          <span className="text-xs text-stone-400">mEq (Eq Wt = {eqWeight.toFixed(2)} g/Eq)</span>
                         </div>
                       </div>
                     </div>
                   )}
 
-                  {/* บทที่ 8 */}
+                  {/* บทที่ 8: Dilution */}
                   {activeTab === 'chap8' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 8: การเจือจาง Q1 × C1 = Q2 × C2</h2>
@@ -496,26 +554,26 @@
                     </div>
                   )}
 
-                  {/* บทที่ 9 */}
+                  {/* บทที่ 9: Alcohol */}
                   {activeTab === 'chap9' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 9: แอลกอฮอล์ เอทานอล และ Proof Gallon</h2>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-3">
-                          <div><label className="text-xs font-semibold">Alcohol สต็อกที่มี (% v/v):</label><input type="number" value={c9StockAlc} onChange={e => setC9StockAlc(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
+                          <div><label className="text-xs font-semibold">Alcohol สต็อก (% v/v):</label><input type="number" value={c9StockAlc} onChange={e => setC9StockAlc(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
                           <div><label className="text-xs font-semibold">Alcohol ที่ต้องการ (% v/v):</label><input type="number" value={c9TargetAlc} onChange={e => setC9TargetAlc(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
                           <div><label className="text-xs font-semibold">ปริมาตรตำรับสุดท้าย (mL):</label><input type="number" value={c9TargetVol} onChange={e => setC9TargetVol(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" /></div>
                         </div>
                         <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
                           <span className="text-xs text-stone-500">ปริมาตรสต็อก {c9StockAlc}% ที่ต้องตวง:</span>
                           <span className="text-5xl font-extrabold text-amber-600 my-2">{resC9}</span>
-                          <span className="text-xs text-stone-400">mL (Proof = {(parseFloat(c9TargetAlc)*2).toFixed(0)} Proof)</span>
+                          <span className="text-xs text-stone-400">mL (คิดเป็น {(parseFloat(c9TargetAlc)*2).toFixed(0)} Proof)</span>
                         </div>
                       </div>
                     </div>
                   )}
 
-                  {/* บทที่ 10 */}
+                  {/* บทที่ 10: Alligation Alternate */}
                   {activeTab === 'chap10' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 10: Alligation Alternate (การผสมสัดส่วนไขว้)</h2>
@@ -530,15 +588,15 @@
                         </div>
                         <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
                           <div className="w-full space-y-2 text-center">
-                            <div>ตัวยา {c10High}%: <strong className="text-2xl text-emerald-600">{resC10H}</strong> ส่วน</div>
-                            <div>ตัวยา {c10Low}%: <strong className="text-2xl text-cyan-600">{resC10L}</strong> ส่วน</div>
+                            <div>ใช้ตัวยา {c10High}%: <strong className="text-2xl text-emerald-600">{resC10H}</strong> ส่วน</div>
+                            <div>ใช้ตัวยา {c10Low}%: <strong className="text-2xl text-cyan-600">{resC10L}</strong> ส่วน</div>
                           </div>
                         </div>
                       </div>
                     </div>
                   )}
 
-                  {/* บทที่ 11 */}
+                  {/* บทที่ 11: Aliquot */}
                   {activeTab === 'chap11' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 11: การเจือจางแบบ Aliquot (Aliquot Dilution)</h2>
@@ -558,7 +616,7 @@
                     </div>
                   )}
 
-                  {/* บทที่ 12 */}
+                  {/* บทที่ 12: Powder Volume */}
                   {activeTab === 'chap12' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 12: ปริมาตรผงยาแทนที่ในของเหลว (Powder Volume Displacement)</h2>
@@ -576,7 +634,7 @@
                     </div>
                   )}
 
-                  {/* บทที่ 13 */}
+                  {/* บทที่ 13: IV Flow Rate */}
                   {activeTab === 'chap13' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 13: อัตราการให้ยาทางหลอดเลือดดำ (IV Flow Rate)</h2>
@@ -595,7 +653,7 @@
                     </div>
                   )}
 
-                  {/* บทที่ 14 */}
+                  {/* บทที่ 14: Tonicity & E-Value */}
                   {activeTab === 'chap14' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 14: ออสโมลาริตี โทนิซิตี และค่า E-Value</h2>
@@ -614,7 +672,7 @@
                     </div>
                   )}
 
-                  {/* บทที่ 15 */}
+                  {/* บทที่ 15: pH Buffers */}
                   {activeTab === 'chap15' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 15: บัฟเฟอร์ Henderson-Hasselbalch</h2>
@@ -633,7 +691,7 @@
                     </div>
                   )}
 
-                  {/* บทที่ 16 */}
+                  {/* บทที่ 16: Temperatures */}
                   {activeTab === 'chap16' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 16: การแปลงหน่วยอุณหภูมิ (°C / °F / K)</h2>
@@ -642,6 +700,12 @@
                           <div className="flex gap-2">
                             <input type="number" value={c16Temp} onChange={e => setC16Temp(e.target.value)} className="flex-1 px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" />
                             <select value={c16Scale} onChange={e => setC16Scale(e.target.value)} className="px-3 py-2 rounded-xl border text-xs dark:bg-slate-800"><option value="C">°C</option><option value="F">°F</option></select>
+                          </div>
+                          <div className="p-3 rounded-xl bg-stone-100 dark:bg-slate-800 text-xs space-y-1 text-stone-600 dark:text-slate-300">
+                            <div><strong>เกณฑ์อุณหภูมิ USP:</strong></div>
+                            <div>• Freezer: -25°C ถึง -10°C (-13°F ถึง 14°F)</div>
+                            <div>• Refrigerator: 2°C ถึง 8°C (36°F ถึง 46°F)</div>
+                            <div>• Controlled Room Temp: 20°C ถึง 25°C (68°F ถึง 77°F)</div>
                           </div>
                         </div>
                         <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
@@ -653,7 +717,7 @@
                     </div>
                   )}
 
-                  {/* บทที่ 17 */}
+                  {/* บทที่ 17: Endotoxins */}
                   {activeTab === 'chap17' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 17: ขีดจำกัดเอนโดท็อกซิน (Endotoxin Limit = K / M)</h2>
@@ -671,7 +735,7 @@
                     </div>
                   )}
 
-                  {/* บทที่ 18 */}
+                  {/* บทที่ 18: Stability Kinetics */}
                   {activeTab === 'chap18' && (
                     <div>
                       <h2 className="text-lg font-bold mb-4">บทที่ 18: เสถียรภาพยาและวันหมดอายุ (t90)</h2>
@@ -696,17 +760,17 @@
                     </div>
                   )}
 
-                  {/* บทที่ 19 */}
+                  {/* บทที่ 19: MKT */}
                   {activeTab === 'chap19' && (
                     <div>
-                      <h2 className="text-lg font-bold mb-4">บทที่ 19: อุณหภูมิเฉลี่ยจลนพลศาสตร์ (Mean Kinetic Temperature - MKT)</h2>
+                      <h2 className="text-lg font-bold mb-4">บทที่ 19: อุณหภูมิเฉลี่ยจลนพลศาสตร์ (MKT)</h2>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-3">
                           <div>
                             <label className="text-xs font-semibold">ชุดอุณหภูมิ (°C คั่นด้วยจุลภาค):</label>
                             <input type="text" value={c19Temps} onChange={e => setC19Temps(e.target.value)} className="w-full px-3 py-2 rounded-xl border text-sm dark:bg-slate-800" />
                           </div>
-                          <p className="text-[11px] text-stone-400">คำนวณตามสมการ USP Arrhenius Activation Energy (ΔH = 83.144 kJ/mol)</p>
+                          <p className="text-[11px] text-stone-400">สมการ USP Arrhenius Standard Activation Energy (ΔH = 83.144 kJ/mol)</p>
                         </div>
                         <div className="p-6 rounded-2xl border flex flex-col justify-center items-center bg-amber-500/5 dark:bg-slate-800/40">
                           <span className="text-xs text-stone-500">MKT คำนวณได้:</span>
@@ -717,9 +781,56 @@
                     </div>
                   )}
 
+                  {/* บทที่ 20: ภาคผนวก */}
+                  {activeTab === 'chap20' && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2 text-amber-600 font-bold text-sm">
+                        <Icons.FileText className="w-5 h-5" />
+                        <span>บทที่ 20: ภาคผนวก (Appendix 1)</span>
+                      </div>
+                      <h2 className="text-xl font-bold">ลอการิทึมสามัญและลอการิทึมธรรมชาติ (Common and Natural Logarithms)</h2>
+                      <div className="text-sm leading-relaxed space-y-3 text-stone-600 dark:text-slate-300">
+                        <p>
+                          การคำนวณทางเภสัชกรรมขั้นสูง เช่น ค่า pH, Buffer capacity, จลนพลศาสตร์การเสื่อมสลายของยา (First-order kinetics) และการคำนวณ MKT จำเป็นต้องอาศัยความเข้าใจในฟังก์ชันคณิตศาสตร์เชิงลอการิทึม:
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-stone-200 dark:border-slate-700">
+                            <strong>Common Logarithm (ฐาน 10):</strong><br />
+                            $\log_{10}(x)$ ใช้ในการคำนวณค่า pH และ Henderson-Hasselbalch:<br />
+                            <code>pH = -log[H+]</code>
+                          </div>
+                          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-stone-200 dark:border-slate-700">
+                            <strong>Natural Logarithm (ฐาน e):</strong><br />
+                            $\ln(x)$ ใช้ในสมการอัตราเร็วอันดับหนึ่ง และ Arrhenius equation:<br />
+                            <code>ln(C) = ln(C0) - kt</code>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* บทที่ 21: บทสรุป */}
+                  {activeTab === 'chap21' && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2 text-amber-600 font-bold text-sm">
+                        <Icons.BookOpen className="w-5 h-5" />
+                        <span>บทที่ 21: บทสรุป (Summary)</span>
+                      </div>
+                      <h2 className="text-xl font-bold">มาตรฐานการปฏิบัติวิชาชีพเภสัชกรรม</h2>
+                      <div className="text-sm leading-relaxed space-y-3 text-stone-600 dark:text-slate-300">
+                        <p>
+                          หนังสือ <em>"เภสัชคำนวณทางเภสัชกรรมปฏิบัติ ตาม USP-NF 〈1160〉"</em> ไม่ได้เป็นเพียงการรวบรวมสูตรคณิตศาสตร์ แต่คือ <strong>"มาตรฐานการปฏิบัติงาน (Standard of Practice)"</strong> ที่บูรณาการหลักการทางวิทยาศาสตร์เข้ากับความปลอดภัยของผู้ป่วย
+                        </p>
+                        <p>
+                          เภสัชกรต้องคำนึงถึง Active moiety, รูปแบบเกลือ, น้ำผลึกในโมเลกุลไฮเดรต, ความชื้นที่ถูกดูดซับ, ตลอดจนสภาวะการจัดเก็บยา เพื่อให้มั่นใจว่ายาที่เตรียมขึ้นมีคุณภาพ 100% ตามทฤษฎีและปลอดภัยสูงสุด
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
                 </section>
 
-                {/* Disclaimer */}
+                {/* Clinical Disclaimer Card */}
                 <div className={`rounded-3xl p-5 sm:p-6 backdrop-blur-xl border transition-all ${
                   isDark ? 'bg-slate-900/40 border-slate-800' : 'bg-white/40 border-white/60'
                 }`}>
@@ -735,13 +846,16 @@
                       <p className={isDark ? 'text-slate-400' : 'text-stone-600'}>
                         โปรแกรมนี้จัดทำขึ้นเพื่อเป็นเครื่องมือช่วยคำนวณทางเภสัชกรรมตามแนวทางมาตรฐานของ <strong>USP-NF &lt;1160&gt;</strong> สำหรับการปรุงยาและการจ่ายยา ผู้ปฏิบัติงานต้องทำการตรวจสอบความถูกต้องซ้ำ (Double-checking) และประมาณค่า (Estimation) ก่อนนำไปเตรียมยาจริงให้แก่ผู้ป่วยทุกครั้ง
                       </p>
+                      <div className="pt-2 border-t border-stone-200/40 dark:border-slate-800 text-[11px] text-stone-400">
+                        <strong>อ้างอิงตำรา:</strong> เภสัชคำนวณทางเภสัชกรรมปฏิบัติ ตาม USP-NF &lt;1160&gt; (พิมพ์ครั้งที่ 1, มิถุนายน 2569) • รศ.ดร.ภก. ภูริวัฒน์ ลี้สวัสดิ์ • คณะเภสัชศาสตร์ สถาบันวิทยาการประกอบการแห่งอโยธยา (IESA) • ISBN (e-Book): 978-616-95297-0-5
+                      </div>
                     </div>
                   </div>
                 </div>
 
               </main>
 
-              {/* Right Sidebar TOC */}
+              {/* Right Sidebar Table of Contents (คลิกได้ครบ 21 บท) */}
               <aside className={`lg:col-span-4 rounded-3xl p-5 backdrop-blur-2xl border transition-all shadow-xl sticky top-6 ${
                 isDark ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white/70 border-white/80'
               } ${isTocOpenMobile ? 'block' : 'hidden lg:block'}`}>
@@ -758,7 +872,6 @@
 
                 <div className="space-y-1.5 max-h-[620px] overflow-y-auto pr-1 no-scrollbar text-xs">
                   {tocList.map((item) => {
-                    const isSupported = item.tabRef !== null;
                     const isSelected = activeTab === item.tabRef;
 
                     return (
@@ -770,12 +883,10 @@
                             setIsTocOpenMobile(false);
                           }
                         }}
-                        className={`p-2.5 rounded-2xl border transition-all flex items-center justify-between gap-2 ${
-                          isSupported
-                            ? isSelected
-                              ? 'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-500/20 dark:border-amber-500/40 dark:text-amber-300 shadow-sm font-semibold'
-                              : 'bg-white/50 border-stone-100 hover:bg-stone-50 text-stone-700 dark:bg-slate-800/40 dark:border-slate-800/80 dark:hover:bg-slate-800 dark:text-slate-300 cursor-pointer'
-                            : 'opacity-50'
+                        className={`p-2.5 rounded-2xl border transition-all flex items-center justify-between gap-2 cursor-pointer ${
+                          isSelected
+                            ? 'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-500/20 dark:border-amber-500/40 dark:text-amber-300 shadow-sm font-semibold'
+                            : 'bg-white/50 border-stone-100 hover:bg-stone-50 text-stone-700 dark:bg-slate-800/40 dark:border-slate-800/80 dark:hover:bg-slate-800 dark:text-slate-300'
                         }`}
                       >
                         <div className="flex items-center gap-2 min-w-0">
@@ -787,7 +898,7 @@
 
                         <div className="flex items-center gap-1.5 shrink-0 text-[10px] text-stone-400 font-mono">
                           <span>น.{item.pages}</span>
-                          {isSupported && <Icons.ChevronRight className="w-3.5 h-3.5" />}
+                          <Icons.ChevronRight className="w-3.5 h-3.5" />
                         </div>
                       </div>
                     );
